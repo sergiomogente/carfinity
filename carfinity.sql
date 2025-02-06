@@ -1,83 +1,167 @@
--- CREAR TABLA DE USUARIOS
-CREATE TABLE Usuario (
-    ID_Usuario INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(100),
-    Correo VARCHAR(100) UNIQUE,
-    Contraseña VARCHAR(255),
-    Tipo ENUM('admin', 'cliente') NOT NULL
-);
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 06-02-2025 a las 10:55:20
+-- Versión del servidor: 8.3.0
+-- Versión de PHP: 8.2.18
 
--- CREAR TABLA DE COCHES
-CREATE TABLE Coche (
-    ID_Coche INT AUTO_INCREMENT PRIMARY KEY,
-    Marca VARCHAR(50),
-    Modelo VARCHAR(50),
-    Año INT,
-    Precio DECIMAL(10, 2),
-    Descripcion TEXT,
-    Estado ENUM('disponible', 'reservado', 'vendido') DEFAULT 'disponible',
-    ID_Admin INT,
-    FOREIGN KEY (ID_Admin) REFERENCES Usuario(ID_Usuario)
-);
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
--- CREAR TABLA DE RESERVAS
-CREATE TABLE Reserva (
-    ID_Reserva INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Coche INT,
-    ID_Cliente INT,
-    Fecha_Reserva DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',
-    FOREIGN KEY (ID_Coche) REFERENCES Coche(ID_Coche),
-    FOREIGN KEY (ID_Cliente) REFERENCES Usuario(ID_Usuario)
-);
 
--- CREAR TABLA DE CHATS
-CREATE TABLE Chat (
-    ID_Chat INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Cliente INT NOT NULL,
-    ID_Vendedor INT NOT NULL,
-    Fecha_Creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Estado ENUM('activo', 'cerrado') DEFAULT 'activo',
-    FOREIGN KEY (ID_Cliente) REFERENCES Usuario(ID_Usuario),
-    FOREIGN KEY (ID_Vendedor) REFERENCES Usuario(ID_Usuario)
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
--- CREAR TABLA DE MENSAJES
-CREATE TABLE Mensaje (
-    ID_Mensaje INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Chat INT NOT NULL,
-    Remitente ENUM('cliente', 'vendedor') NOT NULL,
-    Contenido TEXT NOT NULL,
-    Fecha_Envio DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Chat) REFERENCES Chat(ID_Chat)
-);
+--
+-- Base de datos: `carfinity`
+--
 
--- CREAR TABLA DE OPINIONES
-CREATE TABLE Opinion (
-    ID_Opinion INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Coche INT NOT NULL,
-    ID_Cliente INT NOT NULL,
-    Comentario TEXT,
-    Valoracion INT CHECK(Valoracion BETWEEN 1 AND 5),
-    Fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Coche) REFERENCES Coche(ID_Coche),
-    FOREIGN KEY (ID_Cliente) REFERENCES Usuario(ID_Usuario)
-);
+-- --------------------------------------------------------
 
--- CREAR TABLA DE SERVICIOS ADICIONALES
-CREATE TABLE Servicio_Adicional (
-    ID_Servicio INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(100),
-    Descripcion TEXT,
-    Precio DECIMAL(10, 2)
-);
+--
+-- Estructura de tabla para la tabla `chat`
+--
 
--- CREAR TABLA INTERMEDIA ENTRE CLIENTES Y SERVICIOS ADICIONALES
-CREATE TABLE Cliente_Servicio (
-    ID_Cliente INT,
-    ID_Servicio INT,
-    Fecha_Contratacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (ID_Cliente, ID_Servicio),
-    FOREIGN KEY (ID_Cliente) REFERENCES Usuario(ID_Usuario),
-    FOREIGN KEY (ID_Servicio) REFERENCES Servicio_Adicional(ID_Servicio)
-);
+DROP TABLE IF EXISTS `chat`;
+CREATE TABLE IF NOT EXISTS `chat` (
+  `ID_Chat` int NOT NULL AUTO_INCREMENT,
+  `ID_Cliente` int NOT NULL,
+  `ID_Vendedor` int NOT NULL,
+  `Fecha_Creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Estado` enum('activo','cerrado') DEFAULT 'activo',
+  PRIMARY KEY (`ID_Chat`),
+  KEY `ID_Cliente` (`ID_Cliente`),
+  KEY `ID_Vendedor` (`ID_Vendedor`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cliente_servicio`
+--
+
+DROP TABLE IF EXISTS `cliente_servicio`;
+CREATE TABLE IF NOT EXISTS `cliente_servicio` (
+  `ID_Cliente` int NOT NULL,
+  `ID_Servicio` int NOT NULL,
+  `Fecha_Contratacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID_Cliente`,`ID_Servicio`),
+  KEY `ID_Servicio` (`ID_Servicio`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `coche`
+--
+
+DROP TABLE IF EXISTS `coche`;
+CREATE TABLE IF NOT EXISTS `coche` (
+  `ID_Coche` int NOT NULL AUTO_INCREMENT,
+  `Marca` varchar(50) DEFAULT NULL,
+  `Modelo` varchar(50) DEFAULT NULL,
+  `Año` int DEFAULT NULL,
+  `Precio` decimal(10,2) DEFAULT NULL,
+  `Descripcion` text,
+  `Estado` enum('disponible','reservado','vendido') DEFAULT 'disponible',
+  `Foto` varchar(255) NOT NULL,
+  `ID_Admin` int DEFAULT NULL,
+  PRIMARY KEY (`ID_Coche`),
+  KEY `ID_Admin` (`ID_Admin`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mensaje`
+--
+
+DROP TABLE IF EXISTS `mensaje`;
+CREATE TABLE IF NOT EXISTS `mensaje` (
+  `ID_Mensaje` int NOT NULL AUTO_INCREMENT,
+  `ID_Chat` int NOT NULL,
+  `Remitente` enum('cliente','vendedor') NOT NULL,
+  `Contenido` text NOT NULL,
+  `Fecha_Envio` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID_Mensaje`),
+  KEY `ID_Chat` (`ID_Chat`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `opinion`
+--
+
+DROP TABLE IF EXISTS `opinion`;
+CREATE TABLE IF NOT EXISTS `opinion` (
+  `ID_Opinion` int NOT NULL AUTO_INCREMENT,
+  `ID_Coche` int NOT NULL,
+  `ID_Cliente` int NOT NULL,
+  `Comentario` text,
+  `Valoracion` int DEFAULT NULL,
+  `Fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID_Opinion`),
+  KEY `ID_Coche` (`ID_Coche`),
+  KEY `ID_Cliente` (`ID_Cliente`)
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reserva`
+--
+
+DROP TABLE IF EXISTS `reserva`;
+CREATE TABLE IF NOT EXISTS `reserva` (
+  `ID_Reserva` int NOT NULL AUTO_INCREMENT,
+  `ID_Coche` int DEFAULT NULL,
+  `ID_Cliente` int DEFAULT NULL,
+  `Fecha_Reserva` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Estado` enum('pendiente','confirmada','cancelada') DEFAULT 'pendiente',
+  PRIMARY KEY (`ID_Reserva`),
+  KEY `ID_Coche` (`ID_Coche`),
+  KEY `ID_Cliente` (`ID_Cliente`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `servicio_adicional`
+--
+
+DROP TABLE IF EXISTS `servicio_adicional`;
+CREATE TABLE IF NOT EXISTS `servicio_adicional` (
+  `ID_Servicio` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) DEFAULT NULL,
+  `Descripcion` text,
+  `Precio` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`ID_Servicio`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `ID_Usuario` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) DEFAULT NULL,
+  `Correo` varchar(100) DEFAULT NULL,
+  `Contraseña` varchar(255) DEFAULT NULL,
+  `Tipo` enum('admin','cliente') NOT NULL,
+  PRIMARY KEY (`ID_Usuario`),
+  UNIQUE KEY `Correo` (`Correo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
