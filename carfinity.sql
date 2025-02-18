@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 06-02-2025 a las 10:55:20
+-- Tiempo de generación: 18-02-2025 a las 11:34:59
 -- Versión del servidor: 8.3.0
 -- Versión de PHP: 8.2.18
 
@@ -24,142 +24,274 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `chat`
+-- Estructura de tabla para la tabla `coches`
 --
 
-DROP TABLE IF EXISTS `chat`;
-CREATE TABLE IF NOT EXISTS `chat` (
-  `ID_Chat` int NOT NULL AUTO_INCREMENT,
-  `ID_Cliente` int NOT NULL,
-  `ID_Vendedor` int NOT NULL,
-  `Fecha_Creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  `Estado` enum('activo','cerrado') DEFAULT 'activo',
-  PRIMARY KEY (`ID_Chat`),
-  KEY `ID_Cliente` (`ID_Cliente`),
-  KEY `ID_Vendedor` (`ID_Vendedor`)
+DROP TABLE IF EXISTS `coches`;
+CREATE TABLE IF NOT EXISTS `coches` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `marca_id` int DEFAULT NULL,
+  `modelo_id` int DEFAULT NULL,
+  `año` int DEFAULT NULL,
+  `precio` decimal(10,2) DEFAULT NULL,
+  `descripcion` text,
+  `disponible` tinyint(1) DEFAULT '1',
+  `tipo_combustible` enum('diesel','gasolina') NOT NULL,
+  `tipo_transmision` enum('automatico','manual') NOT NULL,
+  `km` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `marca_id` (`marca_id`),
+  KEY `modelo_id` (`modelo_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cliente_servicio`
+-- Estructura de tabla para la tabla `coche_extra`
 --
 
-DROP TABLE IF EXISTS `cliente_servicio`;
-CREATE TABLE IF NOT EXISTS `cliente_servicio` (
-  `ID_Cliente` int NOT NULL,
-  `ID_Servicio` int NOT NULL,
-  `Fecha_Contratacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID_Cliente`,`ID_Servicio`),
-  KEY `ID_Servicio` (`ID_Servicio`)
+DROP TABLE IF EXISTS `coche_extra`;
+CREATE TABLE IF NOT EXISTS `coche_extra` (
+  `coche_id` int NOT NULL,
+  `extra_id` int NOT NULL,
+  PRIMARY KEY (`coche_id`,`extra_id`),
+  KEY `extra_id` (`extra_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `coche`
+-- Estructura de tabla para la tabla `comparaciones`
 --
 
-DROP TABLE IF EXISTS `coche`;
-CREATE TABLE IF NOT EXISTS `coche` (
-  `ID_Coche` int NOT NULL AUTO_INCREMENT,
-  `Marca` varchar(50) DEFAULT NULL,
-  `Modelo` varchar(50) DEFAULT NULL,
-  `Año` int DEFAULT NULL,
-  `Precio` decimal(10,2) DEFAULT NULL,
-  `Descripcion` text,
-  `Estado` enum('disponible','reservado','vendido') DEFAULT 'disponible',
-  `Foto` varchar(255) NOT NULL,
-  `ID_Admin` int DEFAULT NULL,
-  PRIMARY KEY (`ID_Coche`),
-  KEY `ID_Admin` (`ID_Admin`)
+DROP TABLE IF EXISTS `comparaciones`;
+CREATE TABLE IF NOT EXISTS `comparaciones` (
+  `cliente_id` int NOT NULL,
+  `coche_id` int NOT NULL,
+  PRIMARY KEY (`cliente_id`,`coche_id`),
+  KEY `coche_id` (`coche_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `mensaje`
+-- Estructura de tabla para la tabla `extras`
 --
 
-DROP TABLE IF EXISTS `mensaje`;
-CREATE TABLE IF NOT EXISTS `mensaje` (
-  `ID_Mensaje` int NOT NULL AUTO_INCREMENT,
-  `ID_Chat` int NOT NULL,
-  `Remitente` enum('cliente','vendedor') NOT NULL,
-  `Contenido` text NOT NULL,
-  `Fecha_Envio` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID_Mensaje`),
-  KEY `ID_Chat` (`ID_Chat`)
+DROP TABLE IF EXISTS `extras`;
+CREATE TABLE IF NOT EXISTS `extras` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  `descripcion` text,
+  `precio` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `opinion`
+-- Estructura de tabla para la tabla `favoritos`
 --
 
-DROP TABLE IF EXISTS `opinion`;
-CREATE TABLE IF NOT EXISTS `opinion` (
-  `ID_Opinion` int NOT NULL AUTO_INCREMENT,
-  `ID_Coche` int NOT NULL,
-  `ID_Cliente` int NOT NULL,
-  `Comentario` text,
-  `Valoracion` int DEFAULT NULL,
-  `Fecha` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID_Opinion`),
-  KEY `ID_Coche` (`ID_Coche`),
-  KEY `ID_Cliente` (`ID_Cliente`)
+DROP TABLE IF EXISTS `favoritos`;
+CREATE TABLE IF NOT EXISTS `favoritos` (
+  `cliente_id` int NOT NULL,
+  `coche_id` int NOT NULL,
+  `fecha_agregado` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cliente_id`,`coche_id`),
+  KEY `coche_id` (`coche_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `financiamiento`
+--
+
+DROP TABLE IF EXISTS `financiamiento`;
+CREATE TABLE IF NOT EXISTS `financiamiento` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `coche_id` int DEFAULT NULL,
+  `cuota_mensual` decimal(10,2) DEFAULT NULL,
+  `plazo_meses` int DEFAULT NULL,
+  `tasa_interes` decimal(5,2) DEFAULT NULL,
+  `estado` enum('pendiente','aprobada','rechazada') DEFAULT 'pendiente',
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  KEY `coche_id` (`coche_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `historial_cambios`
+--
+
+DROP TABLE IF EXISTS `historial_cambios`;
+CREATE TABLE IF NOT EXISTS `historial_cambios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `coche_id` int DEFAULT NULL,
+  `descripcion_cambio` text,
+  `fecha_cambio` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `coche_id` (`coche_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `imagenes_coches`
+--
+
+DROP TABLE IF EXISTS `imagenes_coches`;
+CREATE TABLE IF NOT EXISTS `imagenes_coches` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `coche_id` int DEFAULT NULL,
+  `imagen_url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `coche_id` (`coche_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `marcas`
+--
+
+DROP TABLE IF EXISTS `marcas`;
+CREATE TABLE IF NOT EXISTS `marcas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mensajes`
+--
+
+DROP TABLE IF EXISTS `mensajes`;
+CREATE TABLE IF NOT EXISTS `mensajes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `remitente_id` int DEFAULT NULL,
+  `destinatario_id` int DEFAULT NULL,
+  `mensaje` text,
+  `fecha_envio` datetime DEFAULT CURRENT_TIMESTAMP,
+  `leido` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `remitente_id` (`remitente_id`),
+  KEY `destinatario_id` (`destinatario_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `modelos`
+--
+
+DROP TABLE IF EXISTS `modelos`;
+CREATE TABLE IF NOT EXISTS `modelos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `marca_id` int DEFAULT NULL,
+  `nombre` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `marca_id` (`marca_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notificaciones`
+--
+
+DROP TABLE IF EXISTS `notificaciones`;
+CREATE TABLE IF NOT EXISTS `notificaciones` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario_id` int DEFAULT NULL,
+  `mensaje` text,
+  `leido` tinyint(1) DEFAULT '0',
+  `fecha_envio` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reservas`
+--
+
+DROP TABLE IF EXISTS `reservas`;
+CREATE TABLE IF NOT EXISTS `reservas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `coche_id` int DEFAULT NULL,
+  `fecha_reserva` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fecha_entrega` datetime DEFAULT NULL,
+  `estado` enum('pendiente','confirmada','cancelada') DEFAULT 'pendiente',
+  `paga_senal` decimal(10,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  KEY `coche_id` (`coche_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ubicaciones`
+--
+
+DROP TABLE IF EXISTS `ubicaciones`;
+CREATE TABLE IF NOT EXISTS `ubicaciones` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `direccion` varchar(255) DEFAULT NULL,
+  `ciudad` varchar(100) DEFAULT NULL,
+  `latitud` decimal(10,8) DEFAULT NULL,
+  `longitud` decimal(11,8) DEFAULT NULL,
+  `horario_atencion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  `apellido` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `contrasena` char(60) DEFAULT NULL,
+  `rol` enum('admin','cliente') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `email_2` (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `valoraciones`
+--
+
+DROP TABLE IF EXISTS `valoraciones`;
+CREATE TABLE IF NOT EXISTS `valoraciones` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `coche_id` int DEFAULT NULL,
+  `puntuacion` int DEFAULT NULL,
+  `comentario` text,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  KEY `coche_id` (`coche_id`)
 ) ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `reserva`
---
-
-DROP TABLE IF EXISTS `reserva`;
-CREATE TABLE IF NOT EXISTS `reserva` (
-  `ID_Reserva` int NOT NULL AUTO_INCREMENT,
-  `ID_Coche` int DEFAULT NULL,
-  `ID_Cliente` int DEFAULT NULL,
-  `Fecha_Reserva` datetime DEFAULT CURRENT_TIMESTAMP,
-  `Estado` enum('pendiente','confirmada','cancelada') DEFAULT 'pendiente',
-  PRIMARY KEY (`ID_Reserva`),
-  KEY `ID_Coche` (`ID_Coche`),
-  KEY `ID_Cliente` (`ID_Cliente`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `servicio_adicional`
---
-
-DROP TABLE IF EXISTS `servicio_adicional`;
-CREATE TABLE IF NOT EXISTS `servicio_adicional` (
-  `ID_Servicio` int NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) DEFAULT NULL,
-  `Descripcion` text,
-  `Precio` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`ID_Servicio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuario`
---
-
-DROP TABLE IF EXISTS `usuario`;
-CREATE TABLE IF NOT EXISTS `usuario` (
-  `ID_Usuario` int NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) DEFAULT NULL,
-  `Correo` varchar(100) DEFAULT NULL,
-  `Contraseña` varchar(255) DEFAULT NULL,
-  `Tipo` enum('admin','cliente') NOT NULL,
-  PRIMARY KEY (`ID_Usuario`),
-  UNIQUE KEY `Correo` (`Correo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
