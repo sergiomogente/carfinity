@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('fondo.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Estilo para el header */
+header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+header .logo {
+    width: 150px;
+    padding-top: 137px;
+}
+
+/* Contenedor principal en flexbox */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Formulario alineado a la derecha */
+.form-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button[type="submit"] {
+    background: #494949;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.mensaje {
+    margin-top: 10px;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Mensajes de éxito y error */
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.exito {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Pie de página */
+footer {
+    margin-top: 175px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+}
+
+footer div {
+    flex: 1;
+    padding: 10px;
+    text-align: left;
+}
+
+footer h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+footer a {
+    text-decoration: none;
+    color: inherit; 
+    transition: color 0.3s ease; 
+}
+
+footer a:hover {
+    color: #4a4a4a; 
+    text-decoration: underline;
+    text-decoration: none;
+}
