@@ -91,6 +91,7 @@ button[type="submit"] {
     padding: 10px;
     font-weight: bold;
     border-radius: 5px;
+    margin-left: 10px;
 }
 
 /* Mensajes de éxito y error */
