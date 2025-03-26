@@ -24,7 +24,7 @@ header {
 
 header .logo {
     width: 150px;
-    padding-top: 137px;
+    padding-top: 153px;
 }
 
 /* Contenedor principal en flexbox */
@@ -60,17 +60,17 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-
 button {
-    width: 100%;
+    width: 70%;
     padding: 10px;
-    margin-top: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    margin-left: 10px;
+    display: block;
+    margin: 10px auto; 
 }
+
 
 button:hover {
     opacity: 0.8;
@@ -84,27 +84,6 @@ button[type="submit"] {
 .btn-secondary {
     background: #6c757d;
     color: white;
-}
-
-.mensaje {
-    margin-top: 10px;
-    padding: 10px;
-    font-weight: bold;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-/* Mensajes de éxito y error */
-.error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.exito {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
 }
 
 /* Pie de página */

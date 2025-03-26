@@ -58,9 +58,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 $conn->close();
 ?>
+
+<script type="text/javascript">
+    <?php if ($mensaje): ?>
+        alert("<?php echo $mensaje; ?>");
+    <?php endif; ?>
+</script>
+
 
 
 <!DOCTYPE html>
@@ -73,7 +79,7 @@ $conn->close();
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 <body>
-
+    
     <div class="container">
         <header>
             <img src="logo_negro.png" alt="Carfinity Logo" class="logo">
@@ -95,9 +101,7 @@ $conn->close();
                 <button type="button" class="btn-secondary" onclick="window.location.href='login.php'">Iniciar Sesión</button>
 
             </form>
-            <?php if ($mensaje): ?>
-                <p class="mensaje <?php echo $clase_mensaje; ?>"><?php echo $mensaje; ?></p>
-            <?php endif; ?>
+
         </div>
         <footer>
     <div class="info">

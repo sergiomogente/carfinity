@@ -84,9 +84,6 @@ $conn->close();
                 <button type="submit">Iniciar Sesión</button>
                 <button type="button" class="btn-secondary" onclick="window.location.href='registro.php'">Registrarse</button>
             </form>
-            <?php if ($mensaje): ?>
-                <p class="mensaje <?php echo $clase_mensaje; ?>"><?php echo $mensaje; ?></p>
-            <?php endif; ?>
         </div>
         <footer>
     <div class="info">
