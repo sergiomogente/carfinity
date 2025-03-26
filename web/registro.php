@@ -27,6 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mensaje = "Error: Formato de email incorrecto.";
         } elseif (strlen($password) < 8) {
             $mensaje = "Error: La contraseña debe tener al menos 8 caracteres.";
+        } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            $mensaje = "Error: La contraseña debe contener al menos una letra y un número.";
+        } elseif (in_array($password, ["12345678", "password", "qwerty", "abcdefg", "87654321"])) {
+            $mensaje = "Error: La contraseña no es válida.";
         } else {
             $sql_check = "SELECT id_cliente FROM cliente WHERE email = ?";
             $stmt_check = $conn->prepare($sql_check);
@@ -43,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("sss", $nombre, $email, $password_hashed);
 
                 if ($stmt->execute()) {
-                    $mensaje = "✅ Registro exitoso.";
+                    $mensaje = "Registro exitoso.";
                     $clase_mensaje = "exito";
                 } else {
                     $mensaje = "Error al registrar: " . $conn->error;
@@ -57,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
