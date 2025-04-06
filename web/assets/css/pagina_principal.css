@@ -1,0 +1,252 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+header {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 150px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: rgb(66, 66, 66); 
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3); 
+}
+
+.user-icon {
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Title section styling */
+.titulo .heading-explore {
+    position: absolute;
+    width: 382px;
+    height: 40px;
+    top: 213px;
+    left: 237px;
+    color: #050b20;
+    font-size: 40px;
+    line-height: 40px;
+    white-space: nowrap;
+}
+
+.titulo .text-wrapper {
+    position: absolute;
+    width: 110px;
+    height: 15px;
+    top: 230px;
+    left: 1206px;
+    color: black;
+    font-size: 15px;
+    text-align: center;
+    line-height: 15px;
+    white-space: nowrap;
+}
+
+.titulo .text-wrapper i {
+    font-size: 15px;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.titulo .text-wrapper a {
+    color: black;  
+    text-decoration: none;
+}
+
+/* Vehículo container and card styling */
+.vehiculos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    margin-top: 100px;
+}
+
+
+.vehiculo-card {
+    position: relative; /* Asegura que los elementos hijos se posicionen en relación a esta */
+    width: 330px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.vehiculo-card:hover {
+    transform: scale(1.05);
+}
+
+.vehiculo-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.vehiculo-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.vehiculo-card .precio {
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.vehiculo-card .ver-mas {
+    display: block;
+    margin: 30px auto;
+    padding: 8px 15px;
+    background: #373737;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 100px;
+    text-align: center;
+}
+
+.vehiculo-card .ver-mas:hover {
+    background: #646464;
+}
+
+/* Specs container styling */
+.specs-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 0 10px;
+}
+
+.spec-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.spec-item i {
+    margin-right: 5px;
+    font-size: 16px;
+    color: #333;
+}
+.tres {
+    display: flex;
+    justify-content: start;
+    margin-top: 90px;
+    padding-left: 240px; /* Alinear con el título */
+    width: fit-content;
+}
+
+.tres ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tres ul li {
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    padding-bottom: 5px;
+    position: relative;
+    margin-right: 30px; /* Espaciado entre elementos */
+}
+
+.tres ul li:first-child {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.tres ul li:not(:first-child) {
+    opacity: 0.6; /* Menos destacado */
+}
+
+.tres ul li a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s, font-weight 0.3s;
+}
+
+.tres ul li a:hover {
+    opacity: 1;
+    font-weight: bold;
+}
+/* Botón Guardar */
+.guardar-btn {
+    position: absolute;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    right: 10px;
+    background: rgba(58, 58, 58, 0.8);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.guardar-btn i {
+    color: black;
+}
+
+.guardar-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.guardar-btn.guardado i {
+    color: white;
+}
+
+/*servicios*/
+.servicios h2{
+    height: 40px;
+    margin-top: 53px;
+    margin-left: 237px;
+    color: #050b20;
+    font-size: 40px;
+    font-weight: normal;
+}
