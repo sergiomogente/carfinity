@@ -1,252 +1,277 @@
+/* General reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #2C2C2C; /* Gris oscuro */
+    color: #E5E5E5; /* Gris claro para texto */
+    line-height: 1.6;
 }
 
-/* Header styling */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+h1, h3 {
+    font-weight: 600;
+}
+
 header {
-    background-color: rgb(0, 0, 0);
-    color: white;
+    background-color: #1F1F1F; /* Negro suave */
+    color: #E5E5E5;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
+header .logo img {
+    width: 150px;
+    height: auto;
+}
+
+header nav ul {
     display: flex;
-    align-items: center;
+    gap: 20px;
 }
 
-.logo img {
-    height: 150px;
+header nav ul li a {
+    color: #E5E5E5;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
+header nav ul li a:hover {
+    color: #858585; /* Amarillo dorado para hover */
 }
 
-nav ul li {
-    margin: 0 15px;
+header .user-icon {
+    font-size: 24px;
+    color: #E5E5E5;
 }
 
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-nav ul li a:hover {
-    color: rgb(66, 66, 66); 
-    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3); 
-}
-
-.user-icon {
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-}
-
-/* Title section styling */
-.titulo .heading-explore {
-    position: absolute;
-    width: 382px;
-    height: 40px;
-    top: 213px;
-    left: 237px;
-    color: #050b20;
-    font-size: 40px;
-    line-height: 40px;
-    white-space: nowrap;
-}
-
-.titulo .text-wrapper {
-    position: absolute;
-    width: 110px;
-    height: 15px;
-    top: 230px;
-    left: 1206px;
-    color: black;
-    font-size: 15px;
+/* Título */
+.titulo {
+    background-color: #2C2C2C; /* Gris oscuro */
+    color: #E5E5E5;
+    padding: 50px 0;
     text-align: center;
-    line-height: 15px;
-    white-space: nowrap;
 }
 
-.titulo .text-wrapper i {
-    font-size: 15px;
-    margin-left: 5px;
-    display: inline-block;
+.titulo h1 {
+    font-size: 36px;
+    font-weight: 600;
 }
 
-.titulo .text-wrapper a {
-    color: black;  
-    text-decoration: none;
-}
-
-/* Vehículo container and card styling */
-.vehiculos-container {
+/* Filtros */
+form {
+    background-color: #1F1F1F; /* Gris muy oscuro */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; /* Centra las tarjetas horizontalmente */
-    margin-top: 100px;
+    gap: 15px;
+    justify-content: center;
 }
 
+form input, form select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Gris intermedio */
+    width: 200px;
+    font-size: 14px;
+    background-color: #2C2C2C; /* Gris oscuro */
+    color: #E5E5E5; /* Gris claro */
+}
+
+form button {
+    background-color: #1F1F1F; /* Gris oscuro */
+    color: #E5E5E5;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #F39C12; /* Amarillo dorado */
+}
+
+form label {
+    font-size: 14px;
+    color: #E5E5E5;
+}
+
+/* Vehículos */
+.vehiculos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
 .vehiculo-card {
-    position: relative; /* Asegura que los elementos hijos se posicionen en relación a esta */
-    width: 330px;
-    border: 1px solid #ddd;
+    background-color: #2C2C2C; /* Gris oscuro */
     border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    text-align: center;
-    background: #fff;
-    transition: transform 0.2s;
+    position: relative;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
 .vehiculo-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-10px);
 }
 
 .vehiculo-card img {
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
+    border-bottom: 2px solid #444; /* Gris intermedio */
 }
 
 .vehiculo-card h3 {
-    margin: 10px 0;
     font-size: 18px;
+    font-weight: 600;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: #E5E5E5;
+}
+
+/* Centro de la tarjeta */
+.vehiculo-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    flex-grow: 1;
 }
 
 .vehiculo-card .precio {
-    color: #000000;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    text-align: center; /* Asegura que el texto esté centrado */
+    width: 100%;
+}
+
+.specs-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 10px 15px;
+    background-color: #3E3E3E; /* Gris intermedio */
+    border-top: 2px solid #444;
+    width: 100%;
+}
+
+.spec-item {
+    font-size: 14px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    color: #E5E5E5;
+}
+
+.spec-item i {
+    font-size: 14px;
 }
 
 .vehiculo-card .ver-mas {
     display: block;
-    margin: 30px auto;
-    padding: 8px 15px;
-    background: #373737;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    width: 100px;
     text-align: center;
+    padding: 10px;
+    background-color: #1F1F1F; /* Gris oscuro */
+    color: #E5E5E5;
+    border-radius: 0 0 8px 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
 .vehiculo-card .ver-mas:hover {
-    background: #646464;
+    background-color: #6b6b6b; /* Amarillo dorado */
 }
 
-/* Specs container styling */
-.specs-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 10px;
-    padding: 0 10px;
-}
-
-.spec-item {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #555;
-}
-
-.spec-item i {
-    margin-right: 5px;
-    font-size: 16px;
-    color: #333;
-}
-.tres {
-    display: flex;
-    justify-content: start;
-    margin-top: 90px;
-    padding-left: 240px; /* Alinear con el título */
-    width: fit-content;
-}
-
-.tres ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.tres ul li {
-    font-size: 16px;
-    font-weight: 400;
-    color: black;
-    padding-bottom: 5px;
-    position: relative;
-    margin-right: 30px; /* Espaciado entre elementos */
-}
-
-.tres ul li:first-child {
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.tres ul li:not(:first-child) {
-    opacity: 0.6; /* Menos destacado */
-}
-
-.tres ul li a {
-    text-decoration: none;
-    color: inherit;
-    transition: opacity 0.3s, font-weight 0.3s;
-}
-
-.tres ul li a:hover {
-    opacity: 1;
-    font-weight: bold;
-}
-/* Botón Guardar */
 .guardar-btn {
     position: absolute;
-    top: 10px;
-    width: 40px;
-    height: 40px;
-    right: 10px;
-    background: rgba(58, 58, 58, 0.8);
+    top: 15px;
+    right: 15px;
+    background: none;
     border: none;
-    border-radius: 50%;
     cursor: pointer;
-    font-size: 18px;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.guardar-btn i {
-    color: black;
+    font-size: 24px;
+    color: #6b6b6b; /* Amarillo dorado */
+    transition: color 0.3s ease;
 }
 
 .guardar-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
+    color: #6b6b6b; /* Rojo para hover */
 }
 
-.guardar-btn.guardado i {
-    color: white;
+.guardar-btn .fas {
+    color: #6b6b6b;
 }
 
-/*servicios*/
-.servicios h2{
-    height: 40px;
-    margin-top: 53px;
-    margin-left: 237px;
-    color: #050b20;
-    font-size: 40px;
-    font-weight: normal;
+.guardar-btn .far {
+    color: #E5E5E5;
+}
+
+/* Mensaje de sin favoritos */
+.mensaje-sin-favoritos {
+    text-align: center;
+    font-size: 18px;
+    color: #E5E5E5;
+    margin-top: 40px;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+    header nav ul {
+        display: block;
+        text-align: center;
+    }
+
+    .vehiculos-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    form input, form select, form button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vehiculos-container {
+        grid-template-columns: 1fr;
+    }
+
+    form input, form select, form button {
+        width: 100%;
+    }
 }
