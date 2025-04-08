@@ -15,12 +15,17 @@ body {
 a {
     text-decoration: none;
     color: inherit;
+    text-align: center;
+    align-items: center;
 }
 
 ul {
     list-style: none;
+   
 }
-
+label{
+    margin: auto;
+}
 h1, h3 {
     font-weight: 600;
 }
@@ -33,16 +38,19 @@ header {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 120px;
 }
 
 header .logo img {
-    width: 150px;
+    width: 280px;
     height: auto;
 }
 
 header nav ul {
     display: flex;
     gap: 20px;
+    text-align: center;
+    align-items: center;
 }
 
 header nav ul li a {
@@ -50,15 +58,19 @@ header nav ul li a {
     font-weight: 500;
     text-transform: uppercase;
     transition: color 0.3s ease;
+    text-align: center;
+    align-items: center;
 }
 
 header nav ul li a:hover {
     color: #858585; /* Amarillo dorado para hover */
 }
 
-header .user-icon {
-    font-size: 24px;
-    color: #E5E5E5;
+.user-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 30px;
 }
 
 /* Título */
@@ -114,7 +126,9 @@ form label {
     font-size: 14px;
     color: #E5E5E5;
 }
-
+.solo_fav{
+    width: 20px;
+}
 /* Vehículos */
 .vehiculos-container {
     display: grid;
@@ -216,7 +230,9 @@ form label {
 .vehiculo-card .ver-mas:hover {
     background-color: #6b6b6b; /* Amarillo dorado */
 }
-
+.filtros{
+    margin-right: auto;
+}
 .guardar-btn {
     position: absolute;
     top: 15px;
@@ -225,16 +241,16 @@ form label {
     border: none;
     cursor: pointer;
     font-size: 24px;
-    color: #6b6b6b; /* Amarillo dorado */
+    color: #ff0000; /* Amarillo dorado */
     transition: color 0.3s ease;
 }
 
 .guardar-btn:hover {
-    color: #6b6b6b; /* Rojo para hover */
+    color: #ff0000; /* Rojo para hover */
 }
 
 .guardar-btn .fas {
-    color: #6b6b6b;
+    color: #ff0000;
 }
 
 .guardar-btn .far {

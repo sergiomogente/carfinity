@@ -47,12 +47,14 @@ $sql = "SELECT c.*,
         FROM coche c
         LEFT JOIN favoritos f ON c.id_coche = f.id_coche";
 
+// Si se selecciona "Solo favoritos", agrega la condición al WHERE
 if ($filtroFavoritos) {
-    $sql .= " AND f.id_usuario = ?";
+    $where[] = "f.id_usuario = ?";
     $params[] = $_SESSION['id_cliente'];
     $types .= 'i';
 }
 
+// Combina los filtros adicionales
 if (!empty($where)) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
@@ -77,27 +79,34 @@ $result = $stmt->get_result();
         function toggleFavorito(idCoche, btn) {
             const formData = new FormData();
             formData.append('id_coche', idCoche);
-            formData.append('origen', 'destacados');
 
             fetch('guardar_favorito.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(res => res.text())
+            .then(res => res.json())
             .then(data => {
-                if (data === "agregado") {
-                    btn.classList.add('guardado');
-                    btn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
-                } else if (data === "eliminado") {
-                    btn.classList.remove('guardado');
-                    btn.querySelector('i').classList.replace('bxs-heart', 'bx-heart');
+                if (data.status === 'success') {
+                    if (data.action === 'agregado') {
+                        btn.classList.add('guardado');
+                        btn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
+                    } else if (data.action === 'eliminado') {
+                        btn.classList.remove('guardado');
+                        btn.querySelector('i').classList.replace('bxs-heart', 'bx-heart');
+                    }
+                } else {
+                    console.error(data.message);
+                    alert('Error: ' + data.message);
                 }
+            })
+            .catch(err => {
+                console.error('Error al procesar la solicitud:', err);
+                alert('Ocurrió un error. Inténtalo de nuevo.');
             });
         }
     </script>
 </head>
 <body>
-
 <header>
     <div class="logo">
         <img src="logo_blanco.png" alt="Logo">
@@ -105,12 +114,24 @@ $result = $stmt->get_result();
     <nav>
         <ul>
             <li><a href="#">Inicio</a></li>
+            <li><a href="#">Quiénes somos</a></li>
+            <li><a href="#">Servicios</a></li>
             <li><a href="#">Vehículos</a></li>
             <li><a href="#">Contacto</a></li>
         </ul>
     </nav>
-    <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+    <div class="user-icon">
+        <i class='bx bxs-user-circle'></i>
+        <?php if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])): ?>
+            <span style="margin-left: 10px; font-size: 14px;"><?= htmlspecialchars($_SESSION['nombre_cliente']) ?></span>
+            <a href="logout.php" style="margin-left: 10px; font-size: 12px;">Cerrar sesión</a>
+        <?php else: ?>
+            <a href="login.php" style="margin-left: 10px; font-size: 12px;">Iniciar sesión</a> /
+            <a href="registrar.php" style="font-size: 12px;">Registrar</a>
+        <?php endif; ?>
+    </div>
 </header>
+
 <section class="titulo">
     <h1 class="heading-explore">Explora nuestros coches</h1>
 </section>
@@ -121,7 +142,7 @@ $result = $stmt->get_result();
     <input type="text" name="modelo" placeholder="Modelo" value="<?= isset($_GET['modelo']) ? htmlspecialchars($_GET['modelo']) : '' ?>">
     <input type="number" name="km" placeholder="KM máx" value="<?= isset($_GET['km']) ? htmlspecialchars($_GET['km']) : '' ?>">
     <input type="number" step="0.01" name="precio" placeholder="Precio máx" value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>">
-    <select name="combustible">
+    <select name="combustible" style="margin-left : 7px;">
         <option value="">Combustible</option>
         <option value="Gasolina" <?= isset($_GET['combustible']) && $_GET['combustible'] === 'Gasolina' ? 'selected' : '' ?>>Gasolina</option>
         <option value="Diésel" <?= isset($_GET['combustible']) && $_GET['combustible'] === 'Diésel' ? 'selected' : '' ?>>Diésel</option>
@@ -133,10 +154,15 @@ $result = $stmt->get_result();
         <option value="Manual" <?= isset($_GET['transmision']) && $_GET['transmision'] === 'Manual' ? 'selected' : '' ?>>Manual</option>
         <option value="Automático" <?= isset($_GET['transmision']) && $_GET['transmision'] === 'Automático' ? 'selected' : '' ?>>Automático</option>
     </select>
-    <label><input type="checkbox" name="solo_favoritos" <?= isset($_GET['solo_favoritos']) ? 'checked' : '' ?>> Solo favoritos</label>
-    <button type="submit" style="padding: 8px 15px; background: black; color: white; border: none; border-radius: 5px;">Filtrar</button>
+    <label>
+        <input class="solo_fav" type="checkbox" name="solo_favoritos" <?= isset($_GET['solo_favoritos']) ? 'checked' : '' ?>> Solo favoritos
+    </label>
+    <div class="filtros">
+    <button type="submit" style="padding: 8px 15px; background: black; color: white; border: none; border-radius: 5px; font-size:15px;">Filtrar</button>
+    <a href="pagina_principal.php" style="padding: 8px 15px; background: #E5E5E5; color: black; text-decoration: none; font-size:15px; border-radius: 5px; margin-left: 10px;">Limpiar filtros</a>   
+    </div>
+    
     <!-- Botón para limpiar filtros -->
-    <a href="pagina_principal.php" style="padding: 8px 15px; background: #E5E5E5; color: black; text-decoration: none; border-radius: 5px; margin-left: 10px;">Limpiar filtros</a>
 </form>
 
 

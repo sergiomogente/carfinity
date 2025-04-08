@@ -1,204 +1,110 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
     font-family: 'Roboto', sans-serif;
 }
 
-body{
-    background-image: url(../images/fondo.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-main{
-    width: 100%;
-    padding: 20px;
-    margin: auto;
-    margin-top: 100px;
-}
-
-.contenedor__todo{
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
-    position: relative;
-}
-
-.caja__trasera{
-    width: 100%;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    background-color: #303030;
-
-}
-
-.caja__trasera div{
-    margin: 100px 40px;
-    color: white;
-    transition: all 500ms;
-}
-
-
-.caja__trasera div p,
-.caja__trasera button{
-    margin-top: 30px;
-}
-
-.caja__trasera div h3{
-    font-weight: 400;
-    font-size: 26px;
-}
-
-.caja__trasera div p{
-    font-size: 16px;
-    font-weight: 300;
-}
-
-.caja__trasera button{
-    padding: 10px 40px;
-    border: 2px solid #fff;
-    font-size: 14px;
-    background: transparent;
-    font-weight: 600;
-    cursor: pointer;
-    color: white;
-    outline: none;
-    transition: all 300ms;
-}
-
-.caja__trasera button:hover{
-    background: #fff;
-    color: #424243;
-}
-
-/*Formularios*/
-
-.contenedor__login-register{
+body {
+    background: linear-gradient(135deg, #2e2e2e, #3b3b3b, #444);
+    color: #f0f0f0;
+    height: 100vh;
     display: flex;
     align-items: center;
-    width: 100%;
-    max-width: 380px;
-    position: relative;
-    top: -185px;
-    left: 10px;
-
-    /*La transicion va despues del codigo JS*/
-    transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    justify-content: center;
 }
 
-.contenedor__login-register form{
+.container {
+    background: #1e1e1e;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     width: 100%;
-    padding: 80px 20px;
-    background: white;
-    position: absolute;
-    border-radius: 20px;
+    max-width: 400px;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
-.contenedor__login-register form h2{
-    font-size: 30px;
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form h2 {
     text-align: center;
-    margin-bottom: 20px;
-    color: #313131;
+    margin-bottom: 1rem;
+    color: #ccc;
 }
 
-.contenedor__login-register form input{
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
+input {
+    padding: 0.75rem;
     border: none;
-    background: #F2F2F2;
-    font-size: 16px;
+    border-radius: 0.5rem;
     outline: none;
+    font-size: 1rem;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
 }
 
-.contenedor__login-register form button{
-    padding: 10px 40px;
-    margin-top: 40px;
-    border: none;
-    font-size: 14px;
-    background: #3d3d3d;
-    font-weight: 600;
-    cursor: pointer;
-    color: white;
-    outline: none;
+input::placeholder {
+    color: #aaa;
 }
 
-
-
-
-.formulario__login{
-    opacity: 1;
-    display: block;
-}
-.formulario__register{
-    display: none;
-}
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-}
-/*:::::Pie de Pagina*/
-.pie-pagina{
-    width: 100%;
-    background-color: #1e2124;}
-.pie-pagina .grupo-1{
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap:50px;
-    padding: 45px 0px;
-}
-.pie-pagina .grupo-1 .box figure{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.pie-pagina .grupo-1 .box figure img{
-    width: 250px;
-}
-.pie-pagina .grupo-1 .box h2{
+button {
+    padding: 0.75rem;
+    background-color: #4d4d4d;
     color: #fff;
-    margin-bottom: 25px;
-    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
-.pie-pagina .grupo-1 .box p{
-    color: #efefef;
-    margin-bottom: 10px;
+
+button:hover {
+    background-color: #6c6c6c;
 }
-.pie-pagina .grupo-1 .red-social i{
-    display: inline-block;
+
+p {
+    text-align: center;
+    color: #aaa;
+}
+
+a {
+    color: #d1d1d1;
     text-decoration: none;
-    width: 45px;
-    height: 45px;
-    line-height: 45px;
-    color: #fff;
-    margin-right: 10px;
-    background-color: #0e0d0d;
-    text-align: center;
-    transition: all 300ms ease;
 }
-.pie-pagina .grupo-1 .red-social i:hover{
-    color: rgb(255, 255, 255);
-}
-.pie-pagina .grupo-2{
-    background-color: #181a1d; 
-    padding: 15px 10px;
-    text-align: center;
+
+a:hover {
+    text-decoration: underline;
     color: #fff;
 }
-.pie-pagina .grupo-2 small{
-    font-size: 15px;
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    flex: 1;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    } to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
