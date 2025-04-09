@@ -96,6 +96,9 @@ form {
     flex-wrap: wrap;
     gap: 15px;
     justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    margin: 30px auto;
 }
 
 form input, form select {
@@ -106,29 +109,41 @@ form input, form select {
     font-size: 14px;
     background-color: #2C2C2C; /* Gris oscuro */
     color: #E5E5E5; /* Gris claro */
+    transition: border-color 0.3s ease;
+}
+
+form input:focus, form select:focus {
+    border-color: #717171; /* Amarillo dorado */
+    outline: none;
 }
 
 form button {
-    background-color: #1F1F1F; /* Gris oscuro */
-    color: #E5E5E5;
+    color: #1F1F1F; /* Gris oscuro */
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
-    background-color: #F39C12; /* Amarillo dorado */
-}
 
 form label {
     font-size: 14px;
     color: #E5E5E5;
 }
-.solo_fav{
-    width: 20px;
+
+.solo_fav {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
+
+.solo_fav input {
+    width: auto;
+    margin: 0;
+}
+
 /* Vehículos */
 .vehiculos-container {
     display: grid;
@@ -264,6 +279,71 @@ form label {
     color: #E5E5E5;
     margin-top: 40px;
 }
+/* Footer */
+footer {
+    background-color: #1F1F1F; /* Gris oscuro */
+    color: #E5E5E5; /* Gris claro */
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3, .footer-section h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #8A9597; /* Amarillo dorado */
+}
+
+.footer-section p, .footer-section ul, .footer-section li {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li a {
+    color: #E5E5E5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #848484;
+}
+
+.social-icons a {
+    font-size: 20px;
+    color: #E5E5E5;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #848484; 
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid #444; /* Gris intermedio */
+    padding-top: 10px;
+    font-size: 14px;
+}
 
 /* Estilos responsive */
 @media (max-width: 768px) {
@@ -290,4 +370,38 @@ form label {
     form input, form select, form button {
         width: 100%;
     }
+}
+
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+}
+
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInUp 0.8s ease-in-out;
 }

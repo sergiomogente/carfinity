@@ -104,20 +104,33 @@ $result = $stmt->get_result();
                 alert('Ocurrió un error. Inténtalo de nuevo.');
             });
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            });
+
+            // Selecciona todos los elementos que quieres animar
+            const elements = document.querySelectorAll(".animate");
+            elements.forEach((el) => observer.observe(el));
+        });
     </script>
 </head>
 <body>
-<header>
+<header class="animate">
     <div class="logo">
         <img src="logo_blanco.png" alt="Logo">
     </div>
     <nav>
         <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Quiénes somos</a></li>
-            <li><a href="#">Servicios</a></li>
-            <li><a href="#">Vehículos</a></li>
-            <li><a href="#">Contacto</a></li>
+                <li><a href="pagina_principal.php">Inicio</a></li>
+                <li><a href="quien_somos.php">Quiénes somos</a></li>
+                <li><a href="servicios.php">Servicios</a></li>
+                <li><a href="contacto.php">Contacto</a></li>
         </ul>
     </nav>
     <div class="user-icon">
@@ -132,17 +145,17 @@ $result = $stmt->get_result();
     </div>
 </header>
 
-<section class="titulo">
+<section class="titulo animate">
     <h1 class="heading-explore">Explora nuestros coches</h1>
 </section>
 
 <!-- Formulario de Filtros -->
-<form method="GET" style="max-width: 900px; margin: 30px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+<form class="animate" method="GET" style="max-width: 900px; margin: 30px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
     <input type="text" name="marca" placeholder="Marca" value="<?= isset($_GET['marca']) ? htmlspecialchars($_GET['marca']) : '' ?>">
     <input type="text" name="modelo" placeholder="Modelo" value="<?= isset($_GET['modelo']) ? htmlspecialchars($_GET['modelo']) : '' ?>">
     <input type="number" name="km" placeholder="KM máx" value="<?= isset($_GET['km']) ? htmlspecialchars($_GET['km']) : '' ?>">
     <input type="number" step="0.01" name="precio" placeholder="Precio máx" value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>">
-    <select name="combustible" style="margin-left : 7px;">
+    <select name="combustible">
         <option value="">Combustible</option>
         <option value="Gasolina" <?= isset($_GET['combustible']) && $_GET['combustible'] === 'Gasolina' ? 'selected' : '' ?>>Gasolina</option>
         <option value="Diésel" <?= isset($_GET['combustible']) && $_GET['combustible'] === 'Diésel' ? 'selected' : '' ?>>Diésel</option>
@@ -154,20 +167,21 @@ $result = $stmt->get_result();
         <option value="Manual" <?= isset($_GET['transmision']) && $_GET['transmision'] === 'Manual' ? 'selected' : '' ?>>Manual</option>
         <option value="Automático" <?= isset($_GET['transmision']) && $_GET['transmision'] === 'Automático' ? 'selected' : '' ?>>Automático</option>
     </select>
+    <div class="solo_fav">
     <label>
-        <input class="solo_fav" type="checkbox" name="solo_favoritos" <?= isset($_GET['solo_favoritos']) ? 'checked' : '' ?>> Solo favoritos
+        <input type="checkbox" name="solo_favoritos" <?= isset($_GET['solo_favoritos']) ? 'checked' : '' ?>> Solo favoritos
     </label>
-    <div class="filtros">
-    <button type="submit" style="padding: 8px 15px; background: black; color: white; border: none; border-radius: 5px; font-size:15px;">Filtrar</button>
-    <a href="pagina_principal.php" style="padding: 8px 15px; background: #E5E5E5; color: black; text-decoration: none; font-size:15px; border-radius: 5px; margin-left: 10px;">Limpiar filtros</a>   
     </div>
     
-    <!-- Botón para limpiar filtros -->
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button type="submit" style="padding: 8px 15px; background: black; color: white; border: none; border-radius: 5px;">Filtrar</button>
+        <a href="pagina_principal.php" style="padding: 8px 15px; background: #E5E5E5; color: black; text-decoration: none; border-radius: 5px;">Limpiar filtros</a>
+    </div>
 </form>
 
 
 <!-- Vehículos -->
-<div class="vehiculos-container">
+<div class="vehiculos-container animate">
     <?php while ($row = $result->fetch_assoc()): ?>
         <div class="vehiculo-card">
             <?php
@@ -202,6 +216,40 @@ $result = $stmt->get_result();
 <?php if ($result->num_rows === 0): ?>
     <div class="mensaje-sin-favoritos">No se encontraron vehículos con esos filtros.</div>
 <?php endif; ?>
-
+<footer class="animate">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>Carfinity</h3>
+            <p>Tu mejor opción para encontrar el coche de tus sueños.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Enlaces rápidos</h4>
+            <ul>
+                <li><a href="pagina_principal.php">Inicio</a></li>
+                <li><a href="quien_somos.php">Quiénes somos</a></li>
+                <li><a href="servicios.php">Servicios</a></li>
+                <li><a href="contacto.php">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Contáctanos</h4>
+            <p><i class='bx bx-envelope'></i> contacto@carfinity.com</p>
+            <p><i class='bx bx-phone'></i> +34 123 456 789</p>
+            <p><i class='bx bx-map'></i> Calle Ejemplo, 123, Madrid</p>
+        </div>
+        <div class="footer-section">
+            <h4>Síguenos</h4>
+            <div class="social-icons">
+                <a href="#"><i class='bx bxl-facebook'></i></a>
+                <a href="#"><i class='bx bxl-twitter'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+                <a href="#"><i class='bx bxl-linkedin'></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Carfinity. Todos los derechos reservados.</p>
+    </div>
+</footer>
 </body>
 </html>
