@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <form class="form" method="POST" action="register.php">
+        <form class="form" method="POST" action="registrar.php">
             <h2>Regístrate</h2>
             <input type="text" name="nombre" placeholder="Nombre completo" required>
             <input type="email" name="email" placeholder="Correo electrónico" required>

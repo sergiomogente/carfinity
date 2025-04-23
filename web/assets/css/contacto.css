@@ -1,0 +1,248 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2C2C2C; /* Gris oscuro */
+    color: #E5E5E5; /* Gris claro para texto */
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    align-items: center;
+}
+
+ul {
+    list-style: none;
+   
+}
+label{
+    margin: auto;
+}
+h1, h3 {
+    font-weight: 600;
+}
+
+header {
+    background-color: #1F1F1F; /* Negro suave */
+    color: #E5E5E5;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 120px;
+}
+
+header .logo img {
+    width: 280px;
+    height: auto;
+}
+
+header nav ul {
+    display: flex;
+    gap: 20px;
+    text-align: center;
+    align-items: center;
+}
+
+header nav ul li a {
+    color: #E5E5E5;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    text-align: center;
+    align-items: center;
+}
+
+header nav ul li a:hover {
+    color: #858585; /* Amarillo dorado para hover */
+}
+
+.user-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 30px;
+}
+/* Main Content */
+main {
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+main h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #ffffff; /* Amarillo dorado */
+}
+
+main p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+main img {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+    background-color: #1F1F1F; /* Gris oscuro */
+    color: #E5E5E5; /* Gris claro */
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3, .footer-section h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #8A9597; /* Gris claro */
+}
+
+.footer-section p, .footer-section ul, .footer-section li {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li a {
+    color: #E5E5E5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #848484;
+}
+
+.social-icons a {
+    font-size: 20px;
+    color: #E5E5E5;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #848484; 
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid #444; /* Gris intermedio */
+    padding-top: 10px;
+    font-size: 14px;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+}
+
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+/* Formulario de contacto */
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: #1F1F1F; /* Fondo oscuro */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.contact-form input, .contact-form textarea {
+    padding: 12px;
+    border: 1px solid #444; /* Gris intermedio */
+    border-radius: 5px;
+    background-color: #2C2C2C; /* Gris oscuro */
+    color: #E5E5E5; /* Texto claro */
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus, .contact-form textarea:focus {
+    border-color: #818181; /* Amarillo dorado */
+    outline: none;
+}
+
+.contact-form textarea {
+    resize: none; /* Desactiva el redimensionamiento */
+}
+
+.contact-form button {
+    padding: 12px 20px;
+    background-color: #818181; /* Amarillo dorado */
+    color: #1F1F1F; /* Texto oscuro */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #1d1d1d; /* Amarillo más oscuro */
+    color:white
+}

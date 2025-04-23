@@ -122,28 +122,29 @@ $result = $stmt->get_result();
 </head>
 <body>
 <header class="animate">
-    <div class="logo">
-        <img src="logo_blanco.png" alt="Logo">
-    </div>
-    <nav>
-        <ul>
+        <div class="logo">
+            <img src="logo_blanco.png" alt="Logo">
+        </div>
+        <nav>
+            <ul>
                 <li><a href="pagina_principal.php">Inicio</a></li>
-                <li><a href="quien_somos.php">Quiénes somos</a></li>
+                <li><a href="quien_somos.php" class="active">Quiénes somos</a></li>
                 <li><a href="servicios.php">Servicios</a></li>
                 <li><a href="contacto.php">Contacto</a></li>
-        </ul>
-    </nav>
-    <div class="user-icon">
-        <i class='bx bxs-user-circle'></i>
-        <?php if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])): ?>
-            <span style="margin-left: 10px; font-size: 14px;"><?= htmlspecialchars($_SESSION['nombre_cliente']) ?></span>
-            <a href="logout.php" style="margin-left: 10px; font-size: 12px;">Cerrar sesión</a>
-        <?php else: ?>
-            <a href="login.php" style="margin-left: 10px; font-size: 12px;">Iniciar sesión</a> /
-            <a href="registrar.php" style="font-size: 12px;">Registrar</a>
-        <?php endif; ?>
-    </div>
-</header>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <i class='bx bxs-user-circle'></i>
+            <?php if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])): ?>
+                <span><?= htmlspecialchars($_SESSION['nombre_cliente']) ?></span>
+                <a href="logout.php"><i class='bx bx-log-out'></i>
+                </a>
+            <?php else: ?>
+                <a href="login.php">Iniciar sesión</a> /
+                <a href="registrar.php">Registrar</a>
+            <?php endif; ?>
+        </div>
+    </header>
 
 <section class="titulo animate">
     <h1 class="heading-explore">Explora nuestros coches</h1>
