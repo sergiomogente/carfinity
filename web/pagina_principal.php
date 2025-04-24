@@ -3,7 +3,7 @@ session_start();
 require_once 'db_conexion.php';
 
 // Filtros
-$where = [];
+$where = ["reservado = 0"]; // Solo mostrar coches no reservados
 $params = [];
 $types = '';
 

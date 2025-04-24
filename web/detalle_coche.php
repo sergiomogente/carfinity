@@ -28,16 +28,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Verificar si el coche existe en la base de datos
-    $sql_check_coche = "SELECT COUNT(*) AS count FROM coche WHERE id_coche = ?";
+    // Verificar si el coche existe y no está reservado
+    $sql_check_coche = "SELECT reservado FROM coche WHERE id_coche = ?";
     $stmt_check_coche = $conn->prepare($sql_check_coche);
     $stmt_check_coche->bind_param("i", $id_coche);
     $stmt_check_coche->execute();
     $result_check_coche = $stmt_check_coche->get_result();
     $row_check_coche = $result_check_coche->fetch_assoc();
 
-    if ($row_check_coche['count'] == 0) {
+    if (!$row_check_coche) {
         echo json_encode(['status' => 'error', 'message' => 'El coche no existe en la base de datos.']);
+        exit;
+    }
+
+    if ($row_check_coche['reservado'] == 1) {
+        echo json_encode(['status' => 'error', 'message' => 'El coche ya está reservado.']);
         exit;
     }
 
@@ -51,20 +56,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_reserva->bind_param("ii", $id_cliente, $id_coche);
         $stmt_reserva->execute();
 
-        // Verificar si la reserva se insertó correctamente
         if ($stmt_reserva->affected_rows === 0) {
             throw new Exception('No se pudo guardar la reserva.');
         }
 
-        // Eliminar el coche de la tabla `coche`
-        $sql_delete_coche = "DELETE FROM coche WHERE id_coche = ?";
-        $stmt_delete_coche = $conn->prepare($sql_delete_coche);
-        $stmt_delete_coche->bind_param("i", $id_coche);
-        $stmt_delete_coche->execute();
+        // Marcar el coche como reservado
+        $sql_update_coche = "UPDATE coche SET reservado = 1 WHERE id_coche = ?";
+        $stmt_update_coche = $conn->prepare($sql_update_coche);
+        $stmt_update_coche->bind_param("i", $id_coche);
+        $stmt_update_coche->execute();
 
-        // Verificar si el coche se eliminó correctamente
-        if ($stmt_delete_coche->affected_rows === 0) {
-            throw new Exception('No se pudo eliminar el coche.');
+        if ($stmt_update_coche->affected_rows === 0) {
+            throw new Exception('No se pudo actualizar el estado del coche.');
         }
 
         // Confirmar la transacción
