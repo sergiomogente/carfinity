@@ -11,21 +11,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "<script>alert('Error: Formato de email incorrecto.');</script>";
     } else {
-        $sql = "SELECT id_cliente, nombre, apellidos, password FROM cliente WHERE email = ?";
+        $sql = "SELECT id_cliente, nombre, apellidos, password, es_admin FROM cliente WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id_cliente, $nombre, $apellidos, $password_hashed);
+            $stmt->bind_result($id_cliente, $nombre, $apellidos, $password_hashed, $es_admin);
             $stmt->fetch();
 
             if (password_verify($password, $password_hashed)) {
                 $_SESSION['id_cliente'] = $id_cliente;
                 $_SESSION['nombre_cliente'] = $nombre . ' ' . $apellidos;
 
-                echo "<script>alert('¡Inicio de sesión exitoso!'); window.location.href = 'pagina_principal.php';</script>";
+                if ($es_admin == 1) {
+                    echo "<script>alert('¡Inicio de sesión exitoso como administrador!'); window.location.href = 'admin.php';</script>";
+                } else {
+                    echo "<script>alert('¡Inicio de sesión exitoso!'); window.location.href = 'pagina_principal.php';</script>";
+                }
                 exit;
             } else {
                 echo "<script>alert('Error: Contraseña incorrecta.');</script>";
@@ -36,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 }
+
 ?>
 
 <!-- Formulario de Login -->
