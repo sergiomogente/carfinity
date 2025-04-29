@@ -70,11 +70,13 @@ button:hover {
 p {
     text-align: center;
     color: #aaa;
+    
 }
 
 a {
     color: #d1d1d1;
     text-decoration: none;
+    text-decoration: underline;
 }
 
 a:hover {

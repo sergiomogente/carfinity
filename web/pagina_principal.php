@@ -175,8 +175,8 @@ $result = $stmt->get_result();
     </div>
     
     <div style="display: flex; gap: 10px; margin-top: 10px;">
-        <button type="submit" style="padding: 8px 15px; background: black; color: white; border: none; border-radius: 5px;">Filtrar</button>
-        <a href="pagina_principal.php" style="padding: 8px 15px; background: #E5E5E5; color: black; text-decoration: none; border-radius: 5px;">Limpiar filtros</a>
+        <button type="submit" class="btn-filtrar">Filtrar</button>
+        <a href="pagina_principal.php" class="btn-limpiar">Limpiar filtros</a>
     </div>
 </form>
 
@@ -194,8 +194,11 @@ $result = $stmt->get_result();
             }
             ?>
             <img src="<?= $imgData ?>" alt="Foto vehículo">
+            <div class="nombre_precio">
             <h3><?= htmlspecialchars($row['marca'] . ' ' . $row['modelo']) ?></h3>
             <p class="precio"><?= number_format($row['precio'], 3) ?> €</p>
+            </div>
+            
 
             <div class="specs-container">
                 <div class="spec-item"><i class="bx bx-tachometer"></i> <?= $row['km'] ?> km</div>
@@ -218,39 +221,41 @@ $result = $stmt->get_result();
     <div class="mensaje-sin-favoritos">No se encontraron vehículos con esos filtros.</div>
 <?php endif; ?>
 <footer class="animate">
-    <div class="footer-container">
-        <div class="footer-section">
-            <h3>Carfinity</h3>
-            <p>Tu mejor opción para encontrar el coche de tus sueños.</p>
-        </div>
-        <div class="footer-section">
-            <h4>Enlaces rápidos</h4>
-            <ul>
-                <li><a href="pagina_principal.php">Inicio</a></li>
-                <li><a href="quien_somos.php">Quiénes somos</a></li>
-                <li><a href="servicios.php">Servicios</a></li>
-                <li><a href="contacto.php">Contacto</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h4>Contáctanos</h4>
-            <p><i class='bx bx-envelope'></i> contacto@carfinity.com</p>
-            <p><i class='bx bx-phone'></i> +34 123 456 789</p>
-            <p><i class='bx bx-map'></i> Calle Ejemplo, 123, Madrid</p>
-        </div>
-        <div class="footer-section">
-            <h4>Síguenos</h4>
-            <div class="social-icons">
-                <a href="#"><i class='bx bxl-facebook'></i></a>
-                <a href="#"><i class='bx bxl-twitter'></i></a>
-                <a href="#"><i class='bx bxl-instagram'></i></a>
-                <a href="#"><i class='bx bxl-linkedin'></i></a>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Carfinity</h3>
+                <p>Tu mejor opción para encontrar el coche de tus sueños.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="pagina_principal.php">Inicio</a></li>
+                    <li><a href="quien_somos.php">Quiénes somos</a></li>
+                    <li><a href="servicios.php">Servicios</a></li>
+                    <li><a href="contacto.php">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contáctanos</h4>
+                <p><i class='bx bx-envelope'></i> contacto@carfinity.com</p>
+                <p><i class='bx bx-phone'></i> +34 123 456 789</p>
+                <p><i class='bx bx-map'></i> Calle Ejemplo, 123, Madrid</p>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-twitter'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2025 Carfinity. Todos los derechos reservados.</p>
-    </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Carfinity. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
 </footer>
 </body>
 </html>

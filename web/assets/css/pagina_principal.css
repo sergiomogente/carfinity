@@ -155,7 +155,7 @@ form label {
 }
 
 .vehiculo-card {
-    background-color: #2C2C2C; /* Gris oscuro */
+    background-color: #212121; /* Gris oscuro */
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -197,15 +197,41 @@ form label {
 }
 
 .vehiculo-card .precio {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 24px; /* Aumenta el tamaño del texto */
+    font-weight: bold;
     margin-bottom: 10px;
     display: flex;
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
     text-align: center; /* Asegura que el texto esté centrado */
     width: 100%;
+    color: #ffffff; /* Color dorado para destacar el precio */
+    padding: 10px; /* Añade espacio interno */
+    background-color: #1F1F1F;
+    margin: 0;
 }
+
+.nombre_precio{
+    text-align: center;
+    gap: 15px;
+    justify-content: center;
+    background-color: transparent; /* Fondo transparente para el contenedor */
+    border-top: 2px solid #444;
+    width: 100%;
+    margin: 0; /* Elimina márgenes */
+    padding: 0; /* Elimina el padding */
+}
+
+.nombre_precio h3 {
+    background-color: #3E3E3E; /* Fondo gris claro */
+    color: #E5E5E5; /* Texto claro */
+    padding: 15px; /* Espaciado interno */
+    text-align: center;
+    margin: 0; /* Elimina márgenes */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    border-bottom: 1px solid #444; /* Línea separadora */
+}
+
 
 .specs-container {
     display: flex;
@@ -304,7 +330,7 @@ footer {
 .footer-section h3, .footer-section h4 {
     font-size: 18px;
     margin-bottom: 15px;
-    color: #8A9597; /* Amarillo dorado */
+    color: #8A9597; /* Gris claro */
 }
 
 .footer-section p, .footer-section ul, .footer-section li {
@@ -405,3 +431,60 @@ footer {
     transform: translateY(0);
     animation: fadeInUp 0.8s ease-in-out;
 }
+
+.btn-filtro {
+    padding: 8px 15px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-filtro:hover {
+    background: #6b6b6b; /* Gris intermedio */
+    color: white;
+}
+
+/* Estilo para el botón "Filtrar" */
+.btn-filtrar {
+    padding: 10px 10px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+/* Estilo para el botón "Limpiar filtros" */
+.btn-limpiar {
+    padding: 5px 10px;
+    background: #E5E5E5; /* Gris claro */
+    color: black;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 5px;
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none; /* Oculta los punteros en navegadores basados en WebKit */
+    margin: 0; /* Elimina cualquier margen */
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Oculta los punteros en Firefox */
+    appearance: textfield; /* Asegura un estilo consistente */
+}
+

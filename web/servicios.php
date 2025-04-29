@@ -41,28 +41,50 @@ require_once 'db_conexion.php';
     <!-- Contenido principal -->
     <main class="animate">
         <h1>Nuestros Servicios</h1>
-        <p>En Carfinity, ofrecemos una amplia gama de servicios para satisfacer todas tus necesidades relacionadas con vehículos.</p>
-        
         <div class="services-container">
             <div class="service-card">
-                <i class='bx bxs-car-garage'></i>
-                <h3>Venta de vehículos</h3>
-                <p>Encuentra el coche de tus sueños entre nuestra amplia selección de vehículos nuevos y usados.</p>
+                <div class="card-inner">
+                    <div class="card-front">
+                        <i class='bx bxs-car-mechanic' aria-hidden="true"></i>
+                        <h3>Revisión técnica</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>Realizamos revisiones técnicas completas para garantizar la seguridad y el rendimiento de tu vehículo.</p>
+                    </div>
+                </div>
             </div>
             <div class="service-card">
-                <i class='bx bxs-wrench'></i>
-                <h3>Mantenimiento</h3>
-                <p>Ofrecemos servicios de mantenimiento y reparación para mantener tu coche en perfectas condiciones.</p>
+                <div class="card-inner">
+                    <div class="card-front">
+                        <i class='bx bxs-wrench' aria-hidden="true"></i>
+                        <h3>Mantenimiento</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>Ofrecemos servicios de mantenimiento y reparación para mantener tu coche en perfectas condiciones.</p>
+                    </div>
+                </div>
             </div>
             <div class="service-card">
-                <i class='bx bxs-shield'></i>
-                <h3>Seguros de vehículos</h3>
-                <p>Protege tu coche con nuestras opciones de seguros personalizadas y asequibles.</p>
+                <div class="card-inner">
+                    <div class="card-front">
+                        <i class='bx bxs-shield' aria-hidden="true"></i>
+                        <h3>Seguros de vehículos</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>Protege tu coche con nuestras opciones de seguros personalizadas y asequibles.</p>
+                    </div>
+                </div>
             </div>
             <div class="service-card">
-                <i class='bx bxs-map'></i>
-                <h3>Asistencia en carretera</h3>
-                <p>Disfruta de tranquilidad con nuestro servicio de asistencia en carretera disponible las 24 horas.</p>
+                <div class="card-inner">
+                    <div class="card-front">
+                        <i class='bx bxs-map' aria-hidden="true"></i>
+                        <h3>Asistencia en carretera</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>Disfruta de tranquilidad con nuestro servicio de asistencia en carretera disponible las 24 horas.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
