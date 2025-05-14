@@ -15,8 +15,19 @@ body {
 a {
     text-decoration: none;
     color: inherit;
+    text-align: center;
+    align-items: center;
+}
+/* Estilo para el enlace de salir */
+a[href="logout.php"] {
+    color: inherit; /* Mantiene el color actual */
+    text-decoration: none; /* Sin subrayado */
 }
 
+a[href="logout.php"]:hover {
+    color: inherit; /* Mantiene el color actual en hover */
+    text-decoration: none; /* Sin subrayado en hover */
+}
 ul {
     list-style: none;
 }
@@ -65,6 +76,9 @@ header nav ul li a:hover {
     gap: 10px;
     margin-right: 30px;
 }
+.user-icon i{
+    text-decoration: none;
+}
 
 /* Título */
 .titulo {
@@ -108,6 +122,68 @@ header nav ul li a:hover {
     font-size: 16px;
     margin: 5px 0;
     color: #B0B0B0; /* Gris intermedio */
+}
+
+.carrusel-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.carrusel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carrusel-item {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.carrusel-item img {
+    width: 100%;
+    height: 400px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    display: block;
+    border-radius: 10px;
+}
+
+.carrusel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.carrusel-btn-prev {
+    left: 10px;
+}
+
+.carrusel-btn-next {
+    right: 10px;
+}
+
+.carrusel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.carrusel-btn i {
+    font-size: 24px;
 }
 
 .carrusel {
@@ -160,6 +236,9 @@ header nav ul li a:hover {
 .reservar-btn:active {
     background-color: #5A5A5A; /* Gris oscuro */
 }
+
+
+
 
 /* Footer */
 footer {
@@ -261,6 +340,19 @@ footer {
     .detalle-coche-container {
         flex-direction: column;
     }
+
+    .carrusel-container {
+        max-width: 100%;
+    }
+
+    .carrusel-btn {
+        padding: 10px;
+        font-size: 18px;
+    }
+
+    .carrusel-item img {
+        height: 300px; /* Ajusta la altura para pantallas más pequeñas */
+    }
 }
 
 @media (max-width: 480px) {
@@ -276,3 +368,11 @@ footer {
         font-size: 14px;
     }
 }
+
+.carousel-item img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+

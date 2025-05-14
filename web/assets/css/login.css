@@ -110,3 +110,18 @@ a:hover {
         transform: translateY(0);
     }
 }
+
+.reset-password {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.reset-password a {
+    color: #bdbdbd;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.reset-password a:hover {
+    text-decoration: underline;
+}

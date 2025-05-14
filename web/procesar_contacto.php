@@ -1,14 +1,28 @@
 <!-- filepath: c:\wamp64\www\carfinity\carfinity\web\procesar_contacto.php -->
 <?php
-require_once 'db_conexion.php'; // Conexión a la base de datos
-session_start(); // Asegúrate de iniciar la sesión
+session_start();
+
+if (!isset($_SESSION['id_cliente'])) {
+    // Si no ha iniciado sesión, redirigir al formulario con un mensaje de error
+    echo "<script>alert('Debes iniciar sesión para enviar el formulario.'); window.location.href = 'contacto.php';</script>";
+    exit();
+}
+
+// Aquí procesas el formulario si el usuario ha iniciado sesión
+require_once 'db_conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recibir datos del formulario
-    $nombre = htmlspecialchars($_POST['nombre']);
-    $email = htmlspecialchars($_POST['email']);
-    $telefono = htmlspecialchars($_POST['telefono']);
-    $contenido = htmlspecialchars($_POST['mensaje']);
+    $nombre = trim($_POST['nombre']);
+    $email = trim($_POST['email']);
+    $telefono = trim($_POST['telefono']);
+    $mensaje = trim($_POST['mensaje']);
+
+    // Validar los campos
+    if (empty($nombre) || empty($email) || empty($telefono) || empty($mensaje)) {
+        echo "<script>alert('Todos los campos son obligatorios.'); window.location.href = 'contacto.php';</script>";
+        exit();
+    }
 
     // Verificar si el usuario está autenticado
     if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])) {
@@ -20,20 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Depuración: Verificar valores
-    error_log("ID Chat: $id_chat, Remitente: $remitente, Teléfono: $telefono, Gmail: $email, Contenido: $contenido");
+    error_log("ID Chat: $id_chat, Remitente: $remitente, Teléfono: $telefono, Gmail: $email, Contenido: $mensaje");
 
     // Insertar en la base de datos
     $sql = "INSERT INTO mensaje (id_chat, remitente, telefono, gmail, contenido) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isiss", $id_chat, $remitente, $telefono, $email, $contenido);
+    $stmt->bind_param("isiss", $id_chat, $remitente, $telefono, $email, $mensaje);
 
     if ($stmt->execute()) {
-        header("Location: contacto.php?success=1");
-        exit();
+        echo "<script>alert('Tu consulta ha sido enviada con éxito.'); window.location.href = 'contacto.php';</script>";
     } else {
-        error_log("Error en la consulta: " . $stmt->error);
-        header("Location: contacto.php?error=1");
-        exit();
+        echo "<script>alert('Hubo un error al enviar tu consulta. Inténtalo de nuevo.'); window.location.href = 'contacto.php';</script>";
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>

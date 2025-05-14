@@ -30,7 +30,7 @@ require_once 'db_conexion.php';
             <i class='bx bxs-user-circle'></i>
             <?php if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])): ?>
                 <span><?= htmlspecialchars($_SESSION['nombre_cliente']) ?></span>
-                <a href="logout.php"><i class='bx bx-log-out'></i> Cerrar sesión</a>
+                <a href="logout.php"><i class='bx bx-log-out'></i></a>
             <?php else: ?>
                 <a href="login.php">Iniciar sesión</a> /
                 <a href="registrar.php">Registrar</a>

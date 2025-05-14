@@ -95,6 +95,8 @@ if ($result->num_rows > 0) {
     echo "<p>No se encontraron detalles para este coche.</p>";
     exit;
 }
+
+$ruta_carrusel = "assets/images/coche_carrusel/$id_coche";
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +105,8 @@ if ($result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Coche</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/detalle_coche.css">
 </head>
@@ -149,6 +153,55 @@ if ($result->num_rows > 0) {
             <p><strong>Transmisión:</strong> <?= htmlspecialchars($coche['transmision']) ?></p>
             <p><strong>Características:</strong> <?= htmlspecialchars($coche['caracterisitcas']) ?></p>
         </div>
+
+        <!-- Carrusel de imágenes -->
+        <div class="carrusel-container">
+            <?php
+            $ruta_carrusel = "assets/images/coche_carrusel/$id_coche";
+            $ruta_absoluta = $_SERVER['DOCUMENT_ROOT'] . "/carfinity/carfinity/web/" . $ruta_carrusel;
+
+            if (is_dir($ruta_absoluta)) {
+                $imagenes = array_filter(scandir($ruta_absoluta), function($file) use ($ruta_absoluta) {
+                    return preg_match('/\.(jpg|jpeg|png|gif)$/i', $file) && is_file($ruta_absoluta . '/' . $file);
+                });
+
+                sort($imagenes); // Ordenar alfabéticamente
+
+                if (!empty($imagenes)) {
+                    echo '<div id="carruselCoche" class="carousel slide" data-bs-ride="carousel">';
+                    echo '<div class="carousel-indicators">';
+                    foreach ($imagenes as $index => $imagen) {
+                        $active = $index === 0 ? 'active' : '';
+                        echo "<button type='button' data-bs-target='#carruselCoche' data-bs-slide-to='$index' class='$active' aria-current='true' aria-label='Slide $index'></button>";
+                    }
+                    echo '</div>';
+                    echo '<div class="carousel-inner">';
+                    foreach ($imagenes as $index => $imagen) {
+                        $active = $index === 0 ? 'active' : '';
+                        $ruta_relativa = $ruta_carrusel . '/' . $imagen;
+                        echo "<div class='carousel-item $active'>";
+                        echo "<img src='$ruta_relativa' class='d-block w-100' alt='Imagen del coche'>";
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                    echo '<button class="carousel-control-prev" type="button" data-bs-target="#carruselCoche" data-bs-slide="prev">';
+                    echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                    echo '<span class="visually-hidden">Previous</span>';
+                    echo '</button>';
+                    echo '<button class="carousel-control-next" type="button" data-bs-target="#carruselCoche" data-bs-slide="next">';
+                    echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                    echo '<span class="visually-hidden">Next</span>';
+                    echo '</button>';
+                    echo '</div>';
+                } else {
+                    echo "<p>No hay imágenes disponibles para este coche.</p>";
+                }
+            } else {
+                echo "<p>La carpeta de imágenes no existe.</p>";
+            }
+            ?>
+        </div>
+
         <div class="reservar-container">
             <button class="reservar-btn" onclick="reservarCoche(<?= $id_coche ?>)">Reservar ya</button>
         </div>
@@ -233,6 +286,32 @@ if ($result->num_rows > 0) {
 
             const elements = document.querySelectorAll(".animate");
             elements.forEach((el) => observer.observe(el));
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const carrusel = document.querySelector(".carrusel");
+            const items = document.querySelectorAll(".carrusel-item");
+            const btnPrev = document.querySelector(".carrusel-btn-prev");
+            const btnNext = document.querySelector(".carrusel-btn-next");
+            let index = 0;
+
+            function mostrarImagen(index) {
+                const offset = -index * 100; // Desplazamiento en porcentaje
+                carrusel.style.transform = `translateX(${offset}%)`;
+            }
+
+            btnPrev.addEventListener("click", () => {
+                index = (index - 1 + items.length) % items.length;
+                mostrarImagen(index);
+            });
+
+            btnNext.addEventListener("click", () => {
+                index = (index + 1) % items.length;
+                mostrarImagen(index);
+            });
+
+            mostrarImagen(index);
         });
     </script>
 </body>
