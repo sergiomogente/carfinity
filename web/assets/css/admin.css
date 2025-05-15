@@ -1,54 +1,297 @@
- body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #343a40;
-            color: white;
-            position: fixed;
-            width: 250px;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-        .sidebar .active {
-            background-color: #495057;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .card {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .table th, .table td {
-            vertical-align: middle;
-        }
-        .table th {
-            background-color: #343a40;
-            color: white;
-        }
-        .chat-box {
-            overflow-y: auto;
-            height: 300px;
-        }
-        .bubble {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        .bubble.admin {
-            background-color: #d1e7dd;
-            text-align: right;
-        }
-        .bubble.user {
-            background-color: #f8d7da;
-            text-align: left;
-        }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+header {
+  background-color: #212529;
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+h2 {
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table th {
+  background-color: #343a40;
+  color: white;
+}
+
+.table td {
+  background-color: #ffffff;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-control {
+  border-radius: 0.3rem;
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+}
+
+/* Contenedor del chat */
+.chat-box {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow-y: auto;
+  height: calc(100% - 60px); /* Resta el espacio del formulario */
+}
+
+/* Burbuja de mensajes */
+.bubble {
+  background-color: #e9ecef;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.bubble.admin {
+  background-color: #d1e7dd;
+  margin-left: auto;
+  text-align: right;
+}
+
+.bubble.user {
+  background-color: #f1f1f1;
+  text-align: left;
+}
+
+/* Formulario fijo en la parte inferior */
+#formChat {
+  border-top: 1px solid #dee2e6;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+#formEditar {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+/* Centrar el modal verticalmente */
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Asegura que esté centrado verticalmente */
+}
+
+/* Ajustar el tamaño del modal */
+.modal-content {
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra elegante */
+}
+
+/* Estilo del encabezado del modal */
+.modal-header {
+  background-color: #343a40; /* Fondo oscuro */
+  color: #fff; /* Texto blanco */
+  border-bottom: 2px solid #ffc107; /* Línea decorativa */
+}
+
+/* Botón de cierre del modal */
+.modal-header .btn-close {
+  filter: invert(1); /* Cambiar el color del botón de cierre */
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Botón de cierre personalizado */
+.btn-close-custom {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ff6b6b; /* Color del ícono */
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.btn-close-custom:hover {
+  color: #ff3b3b; /* Color al pasar el mouse */
+}
+
+.btn-close-custom i {
+  pointer-events: none; /* Evitar que el ícono interfiera con el clic */
+}
+
+/* Estilo del cuerpo del modal */
+.modal-body {
+  padding: 20px;
+  font-size: 1rem;
+  color: #495057;
+}
+
+/* Estilo del pie del modal */
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  justify-content: flex-end;
+}
+
+/* Botones del modal */
+.modal-footer .btn {
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.modal-footer .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.modal-footer .btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.modal-footer .btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.btn-success:hover {
+  background-color: #198754;
+}
+
+.btn-warning:hover {
+  background-color: #ffc107;
+}
+
+.btn-danger:hover {
+  background-color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .chat-box {
+    height: auto;
+  }
+  .table th, .table td {
+    font-size: 0.875rem;
+  }
+}
+
+#editarCoche {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
+  display: none;
+}
+
+#editarCoche h4 {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #343a40;
+}
+
+#editarCoche .form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+#editarCoche .form-control {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+}
+
+#editarCoche .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+#editarCoche .btn-success {
+  background-color: #198754;
+  border-color: #198754;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+#editarCoche .btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+/* Barra lateral */
+.sidebar {
+  height: 100vh;
+  background-color: #343a40;
+  color: white;
+  position: fixed;
+  width: 250px;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: block;
+}
+
+.sidebar a:hover {
+  background-color: #495057;
+}
+
+.sidebar .active {
+  background-color: #495057;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+}

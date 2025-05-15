@@ -13,6 +13,77 @@ $total_clientes = $conn->query("SELECT COUNT(*) AS total FROM cliente")->fetch_a
 $total_reservas = $conn->query("SELECT COUNT(*) AS total FROM reserva")->fetch_assoc()['total'];
 $total_mensajes = $conn->query("SELECT COUNT(*) AS total FROM mensaje")->fetch_assoc()['total'];
 
+// Obtener el coche que más se compra
+$coche_mas_comprado = $conn->query("
+    SELECT coche.marca, coche.modelo, COUNT(reserva.id_reserva) AS total_reservas
+    FROM reserva
+    JOIN coche ON reserva.id_coche = coche.id_coche
+    GROUP BY coche.id_coche
+    ORDER BY total_reservas DESC
+    LIMIT 1
+")->fetch_assoc();
+
+// Obtener el coche que menos se compra
+$coche_menos_comprado = $conn->query("
+    SELECT coche.marca, coche.modelo, COUNT(reserva.id_reserva) AS total_reservas
+    FROM coche
+    LEFT JOIN reserva ON coche.id_coche = reserva.id_coche
+    GROUP BY coche.id_coche
+    ORDER BY total_reservas ASC
+    LIMIT 1
+")->fetch_assoc();
+
+// Obtener el cliente que ha hecho más reservas
+$cliente_mas_reservas = $conn->query("
+    SELECT cliente.nombre, COUNT(reserva.id_reserva) AS total_reservas
+    FROM reserva
+    JOIN cliente ON reserva.id_cliente = cliente.id_cliente
+    GROUP BY cliente.id_cliente
+    ORDER BY total_reservas DESC
+    LIMIT 1
+")->fetch_assoc();
+
+// Obtener el cliente que ha hecho menos reservas
+$cliente_menos_reservas = $conn->query("
+    SELECT cliente.nombre, COUNT(reserva.id_reserva) AS total_reservas
+    FROM cliente
+    LEFT JOIN reserva ON cliente.id_cliente = reserva.id_cliente
+    GROUP BY cliente.id_cliente
+    ORDER BY total_reservas ASC
+    LIMIT 1
+")->fetch_assoc();
+
+// Obtener el coche más vendido
+$coche_mas_vendido = $conn->query("
+    SELECT coche.marca, coche.modelo, COUNT(reserva.id_reserva) AS total_reservas
+    FROM reserva
+    JOIN coche ON reserva.id_coche = coche.id_coche
+    GROUP BY coche.id_coche
+    ORDER BY total_reservas DESC
+    LIMIT 1
+")->fetch_assoc();
+$coche_mas_vendido['total_reservas'] = $coche_mas_vendido['total_reservas'] ?? 0;
+
+// Obtener el coche menos vendido
+$coche_menos_vendido = $conn->query("
+    SELECT coche.marca, coche.modelo, COUNT(reserva.id_reserva) AS total_reservas
+    FROM coche
+    LEFT JOIN reserva ON coche.id_coche = reserva.id_coche
+    GROUP BY coche.id_coche
+    ORDER BY total_reservas ASC
+    LIMIT 1
+")->fetch_assoc();
+
+// Obtener el cliente que más compra
+$cliente_que_mas_compra = $conn->query("
+    SELECT cliente.nombre, COUNT(reserva.id_reserva) AS total_reservas
+    FROM reserva
+    JOIN cliente ON reserva.id_cliente = cliente.id_cliente
+    GROUP BY cliente.id_cliente
+    ORDER BY total_reservas DESC
+    LIMIT 1
+")->fetch_assoc();
+
 // Obtener lista de coches
 $coches = $conn->query("SELECT * FROM coche ORDER BY id_coche DESC");
 
@@ -163,44 +234,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
     <div class="content">
         <!-- Estadísticas -->
         <section id="estadisticas" class="section active">
-            <h2 class="mb-4">Estadísticas</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Total de Coches</h5>
-                            <p class="card-text display-4"><?= $total_coches ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Total de Clientes</h5>
-                            <p class="card-text display-4"><?= $total_clientes ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Total de Reservas</h5>
-                            <p class="card-text display-4"><?= $total_reservas ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Total de Mensajes</h5>
-                            <p class="card-text display-4"><?= $total_mensajes ?></p>
-                        </div>
-                    </div>
+    <h2 class="mb-4">Estadísticas</h2>
+    <div class="row">
+        <!-- Mostrar nombres -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Coche más vendido</h5>
+                    <p class="card-text">
+                        <?= $coche_mas_vendido['marca'] . ' ' . $coche_mas_vendido['modelo'] ?> 
+                        (<?= $coche_mas_vendido['total_reservas'] ?> reservas)
+                    </p>
                 </div>
             </div>
-            <!-- Gráfico de estadísticas -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Coche menos vendido</h5>
+                    <p class="card-text">
+                        <?= $coche_menos_vendido['marca'] . ' ' . $coche_menos_vendido['modelo'] ?> 
+                        (<?= $coche_menos_vendido['total_reservas'] ?> reservas)
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Cliente que más compra</h5>
+                    <p class="card-text">
+                        <?= $cliente_que_mas_compra['nombre'] ?> 
+                        (<?= $cliente_que_mas_compra['total_reservas'] ?> reservas)
+                    </p>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Cliente que menos compra</h5>
+                    <p class="card-text">
+                        <?= $cliente_menos_reservas['nombre'] ?> 
+                        (<?= $cliente_menos_reservas['total_reservas'] ?> reservas)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="row mt-4">
+        <div class="col-md-12">
             <canvas id="estadisticasChart" width="400" height="200"></canvas>
-        </section>
+        </div>
+    </div>
+</section>
 
         <!-- Botón para abrir el modal de creación -->
         <section class="mb-5 section" id="vehiculos">
@@ -262,8 +347,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                                         data-reservado="<?= $coche['reservado'] ?>">
                                     Editar
                                 </button>
-                                <a href="eliminarVehiculo.php?id=<?= $coche['id_coche'] ?>" class="btn btn-danger btn-sm">Eliminar</a>
-                            </td>
+                     <button 
+        class="btn btn-danger btn-sm eliminar-coche" 
+        data-id="<?= $coche['id_coche'] ?>">
+        Eliminar
+    </button>                       </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
@@ -408,28 +496,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         <!-- Tabla de Clientes -->
         <section class="mb-5 section" id="clientes">
-            <h2 class="mb-4">Gestión de Clientes</h2>
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Es Admin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($cliente = $clientes->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= $cliente['id_cliente'] ?></td>
-                            <td><?= $cliente['nombre'] ?></td>
-                            <td><?= $cliente['email'] ?></td>
-                            <td><?= $cliente['es_admin'] ? 'Sí' : 'No' ?></td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        </section>
+    <h2 class="mb-4">Gestión de Clientes</h2>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Es Admin</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="clientesTable">
+            <?php while ($cliente = $clientes->fetch_assoc()): ?>
+                <tr id="cliente-<?= $cliente['id_cliente'] ?>">
+                    <td><?= $cliente['id_cliente'] ?></td>
+                    <td><?= $cliente['nombre'] ?></td>
+                    <td><?= $cliente['email'] ?></td>
+                    <td><?= $cliente['es_admin'] ? 'Sí' : 'No' ?></td>
+                    <td>
+                        <button 
+                            class="btn btn-danger btn-sm eliminar-cliente" 
+                            data-id="<?= $cliente['id_cliente'] ?>"
+                            onclick="eliminarCliente(<?= $cliente['id_cliente'] ?>)">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</section>
 
         <!-- Tabla de Reservas -->
         <section class="mb-5 section" id="reservas">
@@ -509,43 +606,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
     <hr>
 
     <h3 class="mt-4">Imágenes por Vehículo</h3>
-    <div id="carruselImagenes">
-        <?php
-        $coches = $conn->query("SELECT id_coche, marca, modelo FROM coche");
-        while ($coche = $coches->fetch_assoc()) {
-            $id_coche = $coche['id_coche'];
-            $imagenes = $conn->query("SELECT id_imagen, ruta_imagen FROM imagenes_coche WHERE id_coche = $id_coche");
-            if ($imagenes->num_rows > 0) {
-                echo "<h4>{$coche['marca']} {$coche['modelo']}</h4>";
-                echo "<div id='carousel{$id_coche}' class='carousel slide mb-4' data-bs-ride='carousel'>";
-                echo "<div class='carousel-inner'>";
-                $active = true;
-                while ($imagen = $imagenes->fetch_assoc()) {
-                    $activeClass = $active ? 'active' : '';
-                    echo "<div class='carousel-item $activeClass'>";
-                    echo "<img src='{$imagen['ruta_imagen']}' class='d-block w-100' alt='Imagen del vehículo'>";
-                    echo "<form action='eliminarImagen.php' method='POST' class='mt-2'>";
-                    echo "<input type='hidden' name='id_imagen' value='{$imagen['id_imagen']}'>";
-                    echo "<input type='hidden' name='ruta_imagen' value='{$imagen['ruta_imagen']}'>";
-                    echo "<button type='submit' class='btn btn-danger btn-sm'>Eliminar</button>";
-                    echo "</form>";
-                    echo "</div>";
-                    $active = false;
-                }
+   <div id="carruselImagenes">
+    <?php
+    $coches = $conn->query("SELECT id_coche, marca, modelo FROM coche");
+    while ($coche = $coches->fetch_assoc()) {
+        $id_coche = $coche['id_coche'];
+        $imagenes = $conn->query("SELECT id_imagen, ruta_imagen FROM imagenes_coche WHERE id_coche = $id_coche");
+        if ($imagenes->num_rows > 0) {
+            echo "<h4>{$coche['marca']} {$coche['modelo']}</h4>";
+            echo "<div id='carousel{$id_coche}' class='carousel slide mb-4' data-bs-ride='carousel'>";
+            echo "<div class='carousel-inner'>";
+            $active = true;
+            while ($imagen = $imagenes->fetch_assoc()) {
+                $activeClass = $active ? 'active' : '';
+                echo "<div class='carousel-item $activeClass'>";
+                echo "<img src='{$imagen['ruta_imagen']}' class='d-block w-100' alt='Imagen del vehículo'>";
                 echo "</div>";
-                echo "<button class='carousel-control-prev' type='button' data-bs-target='#carousel{$id_coche}' data-bs-slide='prev'>";
-                echo "<span class='carousel-control-prev-icon' aria-hidden='true'></span>";
-                echo "<span class='visually-hidden'>Anterior</span>";
-                echo "</button>";
-                echo "<button class='carousel-control-next' type='button' data-bs-target='#carousel{$id_coche}' data-bs-slide='next'>";
-                echo "<span class='carousel-control-next-icon' aria-hidden='true'></span>";
-                echo "<span class='visually-hidden'>Siguiente</span>";
-                echo "</button>";
+                $active = false;
+            }
+            echo "</div>";
+            echo "<button class='carousel-control-prev' type='button' data-bs-target='#carousel{$id_coche}' data-bs-slide='prev'>";
+            echo "<span class='carousel-control-prev-icon' aria-hidden='true'></span>";
+            echo "<span class='visually-hidden'>Anterior</span>";
+            echo "</button>";
+            echo "<button class='carousel-control-next' type='button' data-bs-target='#carousel{$id_coche}' data-bs-slide='next'>";
+            echo "<span class='carousel-control-next-icon' aria-hidden='true'></span>";
+            echo "<span class='visually-hidden'>Siguiente</span>";
+            echo "</button>";
+            echo "</div>";
+
+            // Botones de eliminar imágenes fuera del carrusel
+            echo "<div class='mt-3'>";
+            $imagenes->data_seek(0); // Reinicia el puntero para recorrer las imágenes nuevamente
+            while ($imagen = $imagenes->fetch_assoc()) {
+                echo "<div class='d-flex align-items-center mb-2' id='imagen-{$imagen['id_imagen']}'>";
+                echo "<img src='{$imagen['ruta_imagen']}' alt='Imagen del vehículo' style='width: 100px; height: auto; margin-right: 10px;'>";
+                echo "<button class='btn btn-danger btn-sm eliminar-imagen' data-id='{$imagen['id_imagen']}'>Eliminar</button>";
                 echo "</div>";
             }
+            echo "</div>";
         }
-        ?>
-    </div>
+    }
+    ?>
+</div>
 </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -555,21 +658,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         const estadisticasChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Coches', 'Clientes', 'Reservas', 'Mensajes'],
+                labels: [
+                    'Cliente que más compra', 
+                    'Coche más vendido', 
+                    'Coche menos vendido', 
+                    'Cliente que menos compra'
+                ],
                 datasets: [{
-                    label: 'Estadísticas',
-                    data: [<?= $total_coches ?>, <?= $total_clientes ?>, <?= $total_reservas ?>, <?= $total_mensajes ?>],
+                    label: 'Reservas',
+                    data: [
+                        <?= $cliente_que_mas_compra['total_reservas'] ?>, 
+                        <?= $coche_mas_vendido['total_reservas'] ?>, 
+                        <?= $coche_menos_vendido['total_reservas'] ?>, 
+                        <?= $cliente_menos_reservas['total_reservas'] ?>
+                    ],
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                        'rgba(54, 162, 235, 0.2)', // Cliente que más compra
+                        'rgba(75, 192, 192, 0.2)', // Coche más vendido
+                        'rgba(255, 99, 132, 0.2)', // Coche menos vendido
+                        'rgba(255, 206, 86, 0.2)'  // Cliente que menos compra
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(153, 102, 255, 1)'
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)'
                     ],
                     borderWidth: 1
                 }]
@@ -664,5 +777,123 @@ function cargarMensajes(idChat) {
             });
         });
     </script>
+<script>
+    function eliminarCliente(idCliente) {
+        if (!confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+            return;
+        }
+
+        // Enviar solicitud AJAX
+        fetch('eliminarCliente.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id_cliente=${idCliente}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Eliminar la fila del cliente de la tabla
+                const clienteRow = document.getElementById(`cliente-${idCliente}`);
+                if (clienteRow) {
+                    clienteRow.remove();
+                }
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un error al intentar eliminar el cliente.');
+        });
+    }
+    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seleccionar todos los botones de eliminar
+        const botonesEliminar = document.querySelectorAll('.eliminar-coche');
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function () {
+                const idCoche = this.getAttribute('data-id');
+
+                if (!confirm('¿Estás seguro de que deseas eliminar este coche?')) {
+                    return;
+                }
+
+                // Enviar solicitud AJAX para eliminar el coche
+                fetch('eliminarVehiculo.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `id_coche=${idCoche}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Eliminar la fila del coche de la tabla
+                        const filaCoche = this.closest('tr');
+                        if (filaCoche) {
+                            filaCoche.remove();
+                        }
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al intentar eliminar el coche.');
+                });
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seleccionar todos los botones de eliminar imagen
+        const botonesEliminarImagen = document.querySelectorAll('.eliminar-imagen');
+
+        botonesEliminarImagen.forEach(boton => {
+            boton.addEventListener('click', function () {
+                const idImagen = this.getAttribute('data-id');
+
+                if (!confirm('¿Estás seguro de que deseas eliminar esta imagen?')) {
+                    return;
+                }
+
+                // Enviar solicitud AJAX para eliminar la imagen
+                fetch('eliminarImagen.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `id_imagen=${idImagen}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Eliminar la imagen del DOM
+                        const imagenDiv = document.getElementById(`imagen-${idImagen}`);
+                        if (imagenDiv) {
+                            imagenDiv.remove();
+                        }
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al intentar eliminar la imagen.');
+                });
+            });
+        });
+    });
+</script>
 </body>
 </html>
