@@ -2,6 +2,40 @@
 session_start();
 require_once 'db_conexion.php';
 
+// Verificar si el usuario está autenticado
+$id_cliente = $_SESSION['id_cliente'] ?? null;
+$nombre_cliente = $_SESSION['nombre_cliente'] ?? 'Cliente'; // Nombre del cliente desde la sesión
+
+// Manejar solicitudes AJAX para el chat
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje'])) {
+    // Enviar mensaje
+    $mensaje = $_POST['mensaje'];
+    if ($id_cliente && !empty($mensaje)) {
+        $stmt = $conn->prepare("INSERT INTO mensaje (id_chat, remitente, contenido, fecha) VALUES (?, ?, ?, NOW())");
+        $id_chat = $id_cliente; // Usamos el ID del cliente como ID del chat
+        $stmt->bind_param("iss", $id_chat, $nombre_cliente, $mensaje);
+        $success = $stmt->execute();
+        echo json_encode(['success' => $success]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error al enviar el mensaje.']);
+    }
+    exit();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_messages') {
+    // Obtener mensajes
+    if ($id_cliente) {
+        $id_chat = $id_cliente; // Usamos el ID del cliente como ID del chat
+        $result = $conn->query("SELECT remitente, contenido, DATE_FORMAT(fecha, '%Y-%m-%d %H:%i:%s') AS fecha 
+                                FROM mensaje 
+                                WHERE id_chat = $id_chat 
+                                ORDER BY fecha ASC");
+        $mensajes = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['success' => true, 'mensajes' => $mensajes]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Usuario no autenticado.']);
+    }
+    exit();
+}
+
 // Filtros
 $where = ["reservado = 0"]; // Solo mostrar coches no reservados
 $params = [];
@@ -72,8 +106,13 @@ $result = $stmt->get_result();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Coches en Venta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carfinity - Plana Principal</title>
+    <link rel="stylesheet" href="assets/css/pagina_principal.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+
+   
+    </style>
     <link rel="stylesheet" href="assets/css/pagina_principal.css">
     <script>
         function toggleFavorito(idCoche, btn) {
@@ -119,6 +158,83 @@ $result = $stmt->get_result();
             elements.forEach((el) => observer.observe(el));
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatButton = document.getElementById('chat-button');
+        const chatPopup = document.getElementById('chat-popup');
+        const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+
+        // Abrir el chat
+        chatButton.addEventListener('click', () => {
+            chatPopup.style.display = 'flex';
+            cargarMensajes();
+        });
+
+        // Cerrar el chat
+        closeChat.addEventListener('click', () => {
+            chatPopup.style.display = 'none';
+        });
+
+        // Enviar mensaje
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const mensaje = chatInput.value.trim();
+            if (mensaje) {
+                enviarMensaje(mensaje);
+                chatInput.value = '';
+            }
+        });
+
+        // Función para cargar mensajes
+        function cargarMensajes() {
+            fetch('?action=get_messages')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        chatMessages.innerHTML = ''; // Limpiar mensajes anteriores
+                        data.mensajes.forEach(msg => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = msg.remitente === 'Administrador' ? 'admin-message' : 'user-message';
+                            messageDiv.innerHTML = `
+                                <strong>${msg.remitente}:</strong>
+                                <p>${msg.contenido}</p>
+                                <small>${msg.fecha}</small>
+                            `;
+                            chatMessages.appendChild(messageDiv);
+                        });
+                        chatMessages.scrollTop = chatMessages.scrollHeight; // Desplazar al final
+                    } else {
+                        console.error('Error al cargar mensajes:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error al cargar mensajes:', error));
+        }
+
+        // Función para enviar mensaje
+        function enviarMensaje(mensaje) {
+            fetch('', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `mensaje=${encodeURIComponent(mensaje)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cargarMensajes(); // Recargar mensajes después de enviar
+                } else {
+                    alert('Error al enviar el mensaje.');
+                }
+            })
+            .catch(error => console.error('Error al enviar mensaje:', error));
+        }
+
+        // Actualizar mensajes automáticamente cada 3 segundos
+        setInterval(cargarMensajes, 3000);
+    });
+</script>
 </head>
 <body>
 <header class="animate">
@@ -255,6 +371,26 @@ $result = $stmt->get_result();
             <p>&copy; 2025 Carfinity. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+<!-- Botón flotante para abrir el chat -->
+<div id="chat-button" class="chat-button">
+    <i class="bx bx-chat"></i>
+</div>
+
+<!-- Ventana emergente del chat -->
+<div id="chat-popup" class="chat-popup">
+    <div class="chat-header">
+        <h4>Chat con el Administrador</h4>
+        <button id="close-chat" class="close-chat">&times;</button>
+    </div>
+    <div id="chat-messages" class="chat-messages">
+        <!-- Aquí se cargarán los mensajes -->
+    </div>
+    <form id="chat-form" class="chat-form">
+        <input type="text" id="chat-input" placeholder="Escribe un mensaje..." required>
+        <button type="submit" class="send-btn"><i class="bx bx-send"></i></button>
+    </form>
+</div>
 
 </footer>
 </body>

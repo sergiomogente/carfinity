@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once 'db_conexion.php';
 
 $conn = new mysqli("localhost", "root", "", "carfinity");
 if ($conn->connect_error) {
@@ -130,7 +130,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_chat']) && isset($
 // Obtener mensajes por AJAX
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_messages') {
     $id_chat = intval($_GET['id_chat']);
-    $result = $conn->query("SELECT remitente, contenido, fecha FROM mensaje WHERE id_chat = $id_chat ORDER BY fecha ASC");
+    $result = $conn->query("SELECT remitente, contenido, DATE_FORMAT(fecha, '%Y-%m-%d %H:%i:%s') AS fecha FROM mensaje WHERE id_chat = $id_chat ORDER BY fecha ASC");
+
+    $mensajes = [];
+    while ($row = $result->fetch_assoc()) {
+        $mensajes[] = $row;
+    }
+
+    echo json_encode($mensajes);
+    exit();
+}
+
+// Manejar solicitudes AJAX para el chat
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && isset($_POST['id_chat'])) {
+    // Enviar mensaje como administrador
+    $id_chat = intval($_POST['id_chat']);
+    $mensaje = $conn->real_escape_string($_POST['mensaje_admin']);
+    $remitente = 'Administrador';
+
+    $stmt = $conn->prepare("INSERT INTO mensaje (id_chat, remitente, contenido, fecha) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("iss", $id_chat, $remitente, $mensaje);
+    $success = $stmt->execute();
+
+    echo json_encode(['status' => $success ? 'success' : 'error']);
+    exit();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_messages') {
+    // Obtener mensajes de un chat específico
+    $id_chat = intval($_GET['id_chat']);
+    $result = $conn->query("SELECT remitente, contenido, DATE_FORMAT(fecha, '%Y-%m-%d %H:%i:%s') AS fecha 
+                            FROM mensaje 
+                            WHERE id_chat = $id_chat 
+                            ORDER BY fecha ASC");
 
     $mensajes = [];
     while ($row = $result->fetch_assoc()) {
@@ -553,34 +583,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             </table>
         </section>
     </main>
- <!-- SECCIÓN MENSAJES -->
-  <section id="mensajes" class="mt-5 section">
+ <!-- Sección de Mensajes -->
+<section id="mensajes" class="mt-5 section active">
     <h2>Mensajes</h2>
     <div class="row">
-      <div class="col-md-4">
-        <ul class="list-group">
-          <?php while ($chat = $chats->fetch_assoc()): ?>
-            <li class="list-group-item">
-              <a href="#" class="chat-link" data-id-chat="<?= $chat['id_chat'] ?>">
-                <?= $chat['remitente'] ?>
-              </a>
-            </li>
-          <?php endwhile; ?>
-        </ul>
-      </div>
-      <div class="col-md-8">
-        <div class="card" style="height: 400px; display: flex; flex-direction: column;">
-          <div class="chat-box flex-grow-1 p-3" style="overflow-y: auto;"></div>
-          <form id="formChat" class="d-flex p-3 border-top">
-            <input type="hidden" name="id_chat" value="<?= $id_chat ?>">
-            <input type="text" name="mensaje_admin" class="form-control me-2" placeholder="Escribe un mensaje...">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-          </form>
+        <!-- Lista de chats -->
+        <div class="col-md-4">
+            <ul class="list-group">
+                <?php while ($chat = $chats->fetch_assoc()): ?>
+                    <li class="list-group-item">
+                        <a href="#" class="chat-link" data-id-chat="<?= $chat['id_chat'] ?>">
+                            <?= $chat['remitente'] ?>
+                        </a>
+                    </li>
+                <?php endwhile; ?>
+            </ul>
         </div>
-      </div>
+
+        <!-- Ventana de chat -->
+        <div class="col-md-8">
+            <div class="card" style="height: 400px; display: flex; flex-direction: column;">
+                <div class="chat-box flex-grow-1 p-3" style="overflow-y: auto;"></div>
+                <form id="formChat" class="d-flex p-3 border-top">
+                    <input type="hidden" name="id_chat" id="id_chat">
+                    <input type="text" name="mensaje_admin" id="mensaje_admin" class="form-control me-2" placeholder="Escribe un mensaje...">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </section>
-</main>
+</section>
+
+<style>
+/* Estilos para el chat */
+.chat-box {
+    overflow-y: auto;
+    height: 300px;
+}
+
+.bubble {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.bubble.admin {
+    background-color: #d1e7dd;
+    text-align: right;
+}
+
+.bubble.user {
+    background-color: #b3b3b3;
+    text-align: left;
+}
+</style>
  <!-- Gestión de Imágenes -->
 <section id="imagenes" class="section">
     <h2 class="mb-4">Gestión de Imágenes de Vehículos</h2>
@@ -894,6 +950,90 @@ function cargarMensajes(idChat) {
             });
         });
     });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const chatLinks = document.querySelectorAll('.chat-link');
+    const chatBox = document.querySelector('.chat-box');
+    const formChat = document.getElementById('formChat');
+    const idChatInput = document.getElementById('id_chat');
+    const mensajeAdminInput = document.getElementById('mensaje_admin');
+    let lastMessages = []; // Para rastrear los mensajes cargados
+    let intervalId = null; // Para evitar múltiples intervalos
+
+    // Cargar mensajes al hacer clic en un chat
+    chatLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const idChat = this.getAttribute('data-id-chat');
+            idChatInput.value = idChat;
+            cargarMensajes(idChat);
+
+            // Configurar el intervalo para actualizar mensajes
+            if (intervalId) {
+                clearInterval(intervalId); // Limpiar cualquier intervalo previo
+            }
+            intervalId = setInterval(() => {
+                cargarMensajes(idChat);
+            }, 5000);
+        });
+    });
+
+    // Enviar mensaje
+    formChat.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const idChat = idChatInput.value;
+        const mensaje = mensajeAdminInput.value.trim();
+
+        if (idChat && mensaje) {
+            enviarMensaje(idChat, mensaje);
+            mensajeAdminInput.value = '';
+        }
+    });
+
+    // Función para cargar mensajes
+    function cargarMensajes(idChat) {
+        fetch(`admin2.php?action=get_messages&id_chat=${idChat}`)
+            .then(response => response.json())
+            .then(mensajes => {
+                // Comparar los mensajes nuevos con los últimos cargados
+                if (JSON.stringify(mensajes) !== JSON.stringify(lastMessages)) {
+                    lastMessages = mensajes; // Actualizar los mensajes cargados
+                    chatBox.innerHTML = ''; // Limpiar mensajes anteriores
+                    mensajes.forEach(msg => {
+                        const bubble = document.createElement('div');
+                        bubble.className = `bubble ${msg.remitente === 'Administrador' ? 'admin' : 'user'}`;
+                        bubble.innerHTML = `
+                            <strong>${msg.remitente}:</strong><br>
+                            ${msg.contenido}<br>
+                            <small>${msg.fecha}</small>
+                        `;
+                        chatBox.appendChild(bubble);
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight; // Desplazar al final
+                }
+            })
+            .catch(error => console.error('Error al cargar mensajes:', error));
+    }
+
+    // Función para enviar mensaje
+    function enviarMensaje(idChat, mensaje) {
+        fetch('admin2.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `id_chat=${idChat}&mensaje_admin=${encodeURIComponent(mensaje)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                cargarMensajes(idChat); // Recargar mensajes después de enviar
+            } else {
+                alert('Error al enviar el mensaje.');
+            }
+        })
+        .catch(error => console.error('Error al enviar mensaje:', error));
+    }
+});
 </script>
 </body>
 </html>
