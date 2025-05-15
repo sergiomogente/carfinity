@@ -770,33 +770,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
             document.getElementById('edit-año').value = button.getAttribute('data-año');
             document.getElementById('edit-reservado').value = button.getAttribute('data-reservado');
         });
-        // Enviar mensaje
-document.getElementById('formChat')?.addEventListener('submit', function (e) {
-  e.preventDefault();
-  const form = e.target;
-  const data = new URLSearchParams(new FormData(form));
-  fetch('admin2.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: data.toString()
-  }).then(res => res.json())
-    .then(res => {
-      if (res.status === 'success') {
-        form.mensaje_admin.value = '';
-        cargarMensajes(form.id_chat.value);
-      }
-    });
-});
 
-// Cargar mensajes
-document.querySelectorAll('.chat-link').forEach(link => {
-  link.addEventListener('click', function (e) {
-    e.preventDefault();
-    const idChat = this.getAttribute('data-id-chat');
-    cargarMensajes(idChat);
-    document.querySelector('input[name="id_chat"]').value = idChat;
-  });
-});
 
 function cargarMensajes(idChat) {
   fetch(`admin2.php?action=get_messages&id_chat=${idChat}`)
