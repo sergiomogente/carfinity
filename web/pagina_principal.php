@@ -110,10 +110,116 @@ $result = $stmt->get_result();
     <title>Carfinity - Plana Principal</title>
     <link rel="stylesheet" href="assets/css/pagina_principal.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
-
-   
-    </style>
     <link rel="stylesheet" href="assets/css/pagina_principal.css">
+    <style>
+        /* Mensajes del administrador */
+.admin-message {
+    background-color: #cfcfcf; /* Gris claro */
+    color: #333; /* Texto gris oscuro */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+    align-self: flex-start; /* Alinea a la izquierda */
+    max-width: 70%; /* Limita el ancho del mensaje */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Mensajes del usuario */
+.user-message {
+    background-color: #bfbfbf; /* Gris más oscuro */
+    color: #030303; /* Texto blanco */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+    align-self: flex-end; /* Alinea a la derecha */
+    max-width: 70%; /* Limita el ancho del mensaje */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Contenedor de mensajes */
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #eaeaea; /* Fondo gris claro */
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+/* Botón flotante */
+.chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #666;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Ventana emergente del chat */
+.chat-popup {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    background-color: #f5f5f5; /* Fondo gris claro */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Encabezado del chat */
+.chat-header {
+    background-color: #d6d6d6; /* Gris medio */
+    color: #333; /* Texto gris oscuro */
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Formulario del chat */
+.chat-form {
+    display: flex;
+    border-top: 1px solid #ddd;
+    background-color: #f5f5f5; /* Fondo gris claro */
+}
+
+.chat-form input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #eaeaea; /* Fondo gris claro */
+    color: #333; /* Texto gris oscuro */
+}
+
+.chat-form button {
+    background-color: #bfbfbf; /* Gris más oscuro */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+</style>
     <script>
         function toggleFavorito(idCoche, btn) {
             const formData = new FormData();
@@ -231,8 +337,8 @@ $result = $stmt->get_result();
             .catch(error => console.error('Error al enviar mensaje:', error));
         }
 
-        // Actualizar mensajes automáticamente cada 3 segundos
-        setInterval(cargarMensajes, 3000);
+        
+        setInterval(cargarMensajes, 300);
     });
 </script>
 </head>

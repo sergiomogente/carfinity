@@ -2,6 +2,13 @@
 session_start();
 require_once 'db_conexion.php';
 
+// Comprobar si el usuario ha iniciado sesión y es administrador
+if (!isset($_SESSION['id_cliente']) || !isset($_SESSION['nombre_cliente']) || !isset($_SESSION['es_admin']) || $_SESSION['es_admin'] != 1) {
+    // Redirigir al login si no es admin
+    header("Location: login.php");
+    exit();
+}
+
 $conn = new mysqli("localhost", "root", "", "carfinity");
 if ($conn->connect_error) {
     die("Error al conectar con la base de datos: " . $conn->connect_error);
@@ -949,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             intervalId = setInterval(() => {
                 cargarMensajes(idChat);
-            }, 5000);
+            }, 300);
         });
     });
 
