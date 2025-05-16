@@ -932,10 +932,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const formChat = document.getElementById('formChat');
     const idChatInput = document.getElementById('id_chat');
     const mensajeAdminInput = document.getElementById('mensaje_admin');
-    let lastMessages = []; // Para rastrear los mensajes cargados
-    let intervalId = null; // Para evitar múltiples intervalos
+    let lastMessages = []; 
+    let intervalId = null; 
 
-    // Cargar mensajes al hacer clic en un chat
+    
     chatLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
