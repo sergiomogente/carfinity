@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $_SESSION['id_cliente'] = $id_cliente;
                 $_SESSION['nombre_cliente'] = $nombre . ' ' . $apellidos;
-                $_SESSION['es_admin'] = $es_admin;
 
                 if ($es_admin == 1) {
                     echo "<script>alert('¡Inicio de sesión exitoso como administrador!'); window.location.href = 'admin2.php';</script>";

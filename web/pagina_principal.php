@@ -8,13 +8,29 @@ $nombre_cliente = $_SESSION['nombre_cliente'] ?? 'Cliente'; // Nombre del client
 
 // Manejar solicitudes AJAX para el chat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje'])) {
-    // Enviar mensaje
+    // Enviar mensaje del usuario
     $mensaje = $_POST['mensaje'];
     if ($id_cliente && !empty($mensaje)) {
         $stmt = $conn->prepare("INSERT INTO mensaje (id_chat, remitente, contenido, fecha) VALUES (?, ?, ?, NOW())");
         $id_chat = $id_cliente; // Usamos el ID del cliente como ID del chat
         $stmt->bind_param("iss", $id_chat, $nombre_cliente, $mensaje);
         $success = $stmt->execute();
+
+        // Comprobar si ya existe un mensaje del admin en este chat
+        $checkAdmin = $conn->prepare("SELECT COUNT(*) as total FROM mensaje WHERE id_chat = ? AND remitente = 'Administrador'");
+        $checkAdmin->bind_param("i", $id_chat);
+        $checkAdmin->execute();
+        $result = $checkAdmin->get_result();
+        $row = $result->fetch_assoc();
+
+        if ($row['total'] == 0) {
+            // Si no hay mensajes del admin, enviar el mensaje automático
+            $mensaje_auto = "Hola Buenas, gracias por contactar con Carfinity, en breves momentos te atenderemos la consulta.";
+            $stmtAdmin = $conn->prepare("INSERT INTO mensaje (id_chat, remitente, contenido, fecha) VALUES (?, 'Administrador', ?, NOW())");
+            $stmtAdmin->bind_param("is", $id_chat, $mensaje_auto);
+            $stmtAdmin->execute();
+        }
+
         echo json_encode(['success' => $success]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al enviar el mensaje.']);
@@ -338,7 +354,7 @@ $result = $stmt->get_result();
         }
 
         
-        setInterval(cargarMensajes, 300);
+        setInterval(cargarMensajes, 3000);
     });
 </script>
 </head>
