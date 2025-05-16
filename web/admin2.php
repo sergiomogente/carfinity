@@ -943,9 +943,9 @@ document.addEventListener('DOMContentLoaded', () => {
             idChatInput.value = idChat;
             cargarMensajes(idChat);
 
-            // Configurar el intervalo para actualizar mensajes
+            
             if (intervalId) {
-                clearInterval(intervalId); // Limpiar cualquier intervalo previo
+                clearInterval(intervalId);
             }
             intervalId = setInterval(() => {
                 cargarMensajes(idChat);
