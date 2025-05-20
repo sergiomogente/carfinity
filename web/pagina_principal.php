@@ -127,115 +127,423 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="assets/css/pagina_principal.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/pagina_principal.css">
+    <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
-        /* Mensajes del administrador */
-.admin-message {
-    background-color: #cfcfcf; /* Gris claro */
-    color: #333; /* Texto gris oscuro */
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-    align-self: flex-start; /* Alinea a la izquierda */
-    max-width: 70%; /* Limita el ancho del mensaje */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+   .chat-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #666;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    .chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+    .chat-header {
+        background-color: #d6d6d6;
+        color: #333;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+        background-color: #eaeaea;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+    .admin-message {
+        background-color: #cfcfcf;
+        color: #333;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-align: left;
+        align-self: flex-start;
+        max-width: 70%;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .user-message {
+        background-color: #bfbfbf;
+        color: #030303;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-align: right;
+        align-self: flex-end;
+        max-width: 70%;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .chat-form {
+        display: flex;
+        border-top: 1px solid #ddd;
+        background-color: #f5f5f5;
+    }
+    .chat-form input {
+        flex: 1;
+        border: none;
+        padding: 10px;
+        font-size: 14px;
+        background-color: #eaeaea;
+        color: #333;
+    }
+    .chat-form button {
+        background-color: #bfbfbf;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 10px 5px;
+    }
+   .logo {
+        display: none !important;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+    }
+    .user-icon {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .titulo {
+        padding: 30px 0;
+    }
+    .titulo h1, .heading-explore {
+        font-size: 36px;
+        text-align: center;
+    }
+    form {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        max-width: 100%;
+    }
+    form input, form select {
+        width: 100%;
+        min-width: 0;
+    }
+    .vehiculos-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center;
+        gap: 20px;
+        padding: 0 5px;
+    }
+    .vehiculo-card {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto 20px auto;
+        padding: 10px;
+    }
+    .vehiculo-card img {
+        width: 100%;
+        height: auto;
+    }
+    .specs-container {
+        flex-direction: column;
+        gap: 5px;
+        padding: 10px 0;
+    }
+    .chat-popup {
+        width: 98vw;
+        right: 1vw;
+        bottom: 80px;
+        min-width: unset;
+        max-width: 100vw;
+    }
+    .chat-header {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+    .chat-messages {
+        max-height: 200px;
+        font-size: 14px;
+    }
+    .chat-form input {
+        font-size: 13px;
+        padding: 8px;
+        flex: 2 1 0%; /* Hace el input más ancho */
+        min-width: 0;
+    }
+    .chat-form button {
+        flex: 0 0 auto;
+        padding: 8px;
+        font-size: 16px;
+    }
+    .chat-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        bottom: 15px;
+        right: 15px;
+    }
+    .footer-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 10px;
+    }
+    .footer-section {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .footer-bottom {
+        font-size: 13px;
+        text-align: center;
+    }
+    .btn-filtrar, .btn-limpiar {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    header {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+        padding: 10px 0;
+        position: relative;
+    }
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #E5E5E5;
+        cursor: pointer;
+        z-index: 1100;
+    }
+    nav {
+        width: 100%;
+    }
+    nav ul {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        background: #1F1F1F;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        z-index: 1000;
+        border-top: 1px solid #333;
+    }
+    nav ul.show {
+        display: flex;
+    }
+    nav ul li {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #222;
+    }
+    nav ul li:last-child {
+        border-bottom: none;
+    }
+    .user-icon {
+        justify-content: center;
+        margin: 10px 0 0 0;
+        font-size: 16px;
+    }
+}
+.menu-toggle {
+    display: none;
 }
 
-/* Mensajes del usuario */
-.user-message {
-    background-color: #bfbfbf; /* Gris más oscuro */
-    color: #030303; /* Texto blanco */
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    text-align: right;
-    align-self: flex-end; /* Alinea a la derecha */
-    max-width: 70%; /* Limita el ancho del mensaje */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+@media (max-width: 600px) {
+    header .header-row {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        padding: 0;
+    }
+  
+    nav {
+        width: 100%;
+    }
+    nav ul {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0;
+        background: #1F1F1F;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        position: static;
+        border-top: none;
+    }
+    nav ul li {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #222;
+    }
+    nav ul li:last-child {
+        border-bottom: none;
+    }
+    .user-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        background: #1F1F1F;
+        padding: 10px 0;
+        border-bottom: 1px solid #222;
+        width: 100%;
+        margin: 0;
+    }
+    .menu-toggle {
+        display: none !important;
+    }
 }
 
-/* Contenedor de mensajes */
-.chat-messages {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 10px;
-    background-color: #eaeaea; /* Fondo gris claro */
-    border-radius: 10px;
-    border: 1px solid #ddd;
+/* Carrusel Swiper para coches */
+.vehiculos-swiper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 20px 0;
 }
-/* Botón flotante */
-.chat-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #666;
-    color: white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
+.swiper-slide {
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    align-items: stretch;
+    height: auto;
 }
-
-/* Ventana emergente del chat */
-.chat-popup {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 300px;
-    background-color: #f5f5f5; /* Fondo gris claro */
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: none;
-    flex-direction: column;
-    z-index: 1000;
+.vehiculo-card {
+    width: 100%;
+    max-width: 350px;
+    min-width: 250px;
 }
-
-/* Encabezado del chat */
-.chat-header {
-    background-color: #d6d6d6; /* Gris medio */
-    color: #333; /* Texto gris oscuro */
-    padding: 10px;
-    border-radius: 10px 10px 0 0;
+.header-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    min-height: 70px;
 }
 
-/* Formulario del chat */
-.chat-form {
+nav ul {
     display: flex;
-    border-top: 1px solid #ddd;
-    background-color: #f5f5f5; /* Fondo gris claro */
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0 20px 0 0;
+    background: #1F1F1F;
+    align-items: center;
+    justify-content: flex-end;
 }
-
-.chat-form input {
-    flex: 1;
-    border: none;
-    padding: 10px;
-    font-size: 14px;
-    background-color: #eaeaea; /* Fondo gris claro */
-    color: #333; /* Texto gris oscuro */
+.user-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1F1F1F;
+    color: #E5E5E5;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-bottom: 1px solid #222;
+    justify-content: center;
+    width: auto;
 }
+@media (max-width: 900px) {
+    .header-row {
+        max-width: 100vw;
+        padding: 0 10px;
+    }
 
-.chat-form button {
-    background-color: #bfbfbf; /* Gris más oscuro */
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+    nav ul {
+        gap: 15px;
+        padding-right: 10px;
+    }
 }
+@media (max-width: 600px) {
+    .header-row {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        padding: 0;
+    }
 
-</style>
+    nav {
+        width: 100%;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+        background: #1F1F1F;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        position: static;
+        border-top: none;
+    }
+    nav ul li {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #222;
+    }
+    nav ul li:last-child {
+        border-bottom: none;
+    }
+    .user-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        background: #1F1F1F;
+        padding: 10px 0;
+        border-bottom: 1px solid #222;
+        width: 100%;
+        margin: 0;
+    }
+}
+    </style>
     <script>
         function toggleFavorito(idCoche, btn) {
             const formData = new FormData();
@@ -354,17 +662,46 @@ $result = $stmt->get_result();
         }
 
         
-        setInterval(cargarMensajes, 3000);
+        setInterval(cargarMensajes, 500);
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    new Swiper('.vehiculos-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            700: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+            }
+        }
+    });
+});
+</script>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 </head>
 <body>
 <header class="animate">
+    <div class="header-row">
         <div class="logo">
             <img src="logo_blanco.png" alt="Logo">
         </div>
         <nav>
-            <ul>
+            <ul id="main-menu">
                 <li><a href="pagina_principal.php">Inicio</a></li>
                 <li><a href="quien_somos.php" class="active">Quiénes somos</a></li>
                 <li><a href="servicios.php">Servicios</a></li>
@@ -375,14 +712,14 @@ $result = $stmt->get_result();
             <i class='bx bxs-user-circle'></i>
             <?php if (isset($_SESSION['id_cliente']) && isset($_SESSION['nombre_cliente'])): ?>
                 <span><?= htmlspecialchars($_SESSION['nombre_cliente']) ?></span>
-                <a href="logout.php"><i class='bx bx-log-out'></i>
-                </a>
+                <a href="logout.php"><i class='bx bx-log-out'></i></a>
             <?php else: ?>
                 <a href="login.php">Iniciar sesión</a> /
                 <a href="registrar.php">Registrar</a>
             <?php endif; ?>
         </div>
-    </header>
+    </div>
+</header>
 
 <section class="titulo animate">
     <h1 class="heading-explore">Explora nuestros coches</h1>
@@ -419,40 +756,44 @@ $result = $stmt->get_result();
 </form>
 
 
-<!-- Vehículos -->
-<div class="vehiculos-container animate">
-    <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="vehiculo-card">
-            <?php
-            $imgData = '';
-            if (!empty($row['foto_portada'])) {
-                $imgData = 'data:image/jpeg;base64,' . base64_encode($row['foto_portada']);
-            } else {
-                $imgData = 'default.jpg';
-            }
-            ?>
-            <img src="<?= $imgData ?>" alt="Foto vehículo">
-            <div class="nombre_precio">
-            <h3><?= htmlspecialchars($row['marca'] . ' ' . $row['modelo']) ?></h3>
-            <p class="precio"><?= number_format($row['precio'], 3) ?> €</p>
+<!-- Carrusel de coches -->
+<div class="swiper vehiculos-swiper animate">
+    <div class="swiper-wrapper">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="swiper-slide">
+                <div class="vehiculo-card">
+                    <?php
+                    $imgData = '';
+                    if (!empty($row['foto_portada'])) {
+                        $imgData = 'data:image/jpeg;base64,' . base64_encode($row['foto_portada']);
+                    } else {
+                        $imgData = 'default.jpg';
+                    }
+                    ?>
+                    <img src="<?= $imgData ?>" alt="Foto vehículo">
+                    <div class="nombre_precio">
+                        <h3><?= htmlspecialchars($row['marca'] . ' ' . $row['modelo']) ?></h3>
+                        <p class="precio"><?= number_format($row['precio'], 3) ?> €</p>
+                    </div>
+                    <div class="specs-container">
+                        <div class="spec-item"><i class="bx bx-tachometer"></i> <?= $row['km'] ?> km</div>
+                        <div class="spec-item"><i class="bx bx-gas-pump"></i> <?= $row['combustible'] ?></div>
+                        <div class="spec-item"><i class="bx bx-cog"></i> <?= $row['transmision'] ?></div>
+                    </div>
+                    <a href="detalle_coche.php?id=<?= $row['id_coche'] ?>" class="ver-mas">Ver más</a>
+                    <?php if (isset($_SESSION['id_cliente'])): ?>
+                        <button class="guardar-btn <?= $row['es_favorito'] ? 'guardado' : '' ?>" onclick="toggleFavorito(<?= $row['id_coche'] ?>, this)">
+                            <i class="bx <?= $row['es_favorito'] ? 'bxs-heart' : 'bx-heart' ?>"></i>
+                        </button>
+                    <?php endif; ?>
+                </div>
             </div>
-            
-
-            <div class="specs-container">
-                <div class="spec-item"><i class="bx bx-tachometer"></i> <?= $row['km'] ?> km</div>
-                <div class="spec-item"><i class="bx bx-gas-pump"></i> <?= $row['combustible'] ?></div>
-                <div class="spec-item"><i class="bx bx-cog"></i> <?= $row['transmision'] ?></div>
-            </div>
-
-            <a href="detalle_coche.php?id=<?= $row['id_coche'] ?>" class="ver-mas">Ver más</a>
-
-            <?php if (isset($_SESSION['id_cliente'])): ?>
-                <button class="guardar-btn <?= $row['es_favorito'] ? 'guardado' : '' ?>" onclick="toggleFavorito(<?= $row['id_coche'] ?>, this)">
-                    <i class="bx <?= $row['es_favorito'] ? 'bxs-heart' : 'bx-heart' ?>"></i>
-                </button>
-            <?php endif; ?>
-        </div>
-    <?php endwhile; ?>
+        <?php endwhile; ?>
+    </div>
+    <!-- Flechas y paginación -->
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
 </div>
 
 <?php if ($result->num_rows === 0): ?>

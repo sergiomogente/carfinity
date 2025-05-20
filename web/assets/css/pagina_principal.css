@@ -371,33 +371,6 @@ footer {
     font-size: 14px;
 }
 
-/* Estilos responsive */
-@media (max-width: 768px) {
-    header nav ul {
-        display: block;
-        text-align: center;
-    }
-
-    .vehiculos-container {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    form input, form select, form button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .vehiculos-container {
-        grid-template-columns: 1fr;
-    }
-
-    form input, form select, form button {
-        width: 100%;
-    }
-}
-
 
 /* Animaciones */
 @keyframes fadeInUp {
