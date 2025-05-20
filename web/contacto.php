@@ -4,6 +4,7 @@ require_once 'db_conexion.php';
 // Verificar si el usuario está autenticado
 $id_cliente = $_SESSION['id_cliente'] ?? null;
 $nombre_cliente = $_SESSION['nombre_cliente'] ?? 'Cliente'; // Nombre del cliente desde la sesión
+// Manejar solicitudes AJAX para el chat
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje'])) {
     // Enviar mensaje del usuario
@@ -150,9 +151,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje'])) {
                 width: 100%;
                 margin: 0;
             }
-        }
-           main.animate, main {
+               main.animate, main {
         margin-top: 230px;
+        }
+        
     }
     </style>
 </head>
