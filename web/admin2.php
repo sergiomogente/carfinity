@@ -184,6 +184,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
         body {
             background-color: #f8f9fa;
         }
+        /* Estilos para el chat */
+.chat-box {
+    overflow-y: auto;
+    height: 300px;
+}
+
+.bubble {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.bubble.admin {
+    background-color: #d1e7dd;
+    text-align: right;
+}
+
+.bubble.user {
+    background-color: #b3b3b3;
+    text-align: left;
+}
         .sidebar {
             height: 100vh;
             background-color: #343a40;
@@ -245,9 +266,190 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
     max-height: 400px;
     object-fit: cover;
 }
+.sidebar-toggle {
+    display: none;
+}
+
+/* Responsive para todas las secciones del panel admin2.php */
+@media (max-width: 991px) {
+   
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        background: #343a40;
+        z-index: 2000;
+        transition: left 0.3s;
+        padding-top: 60px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    .sidebar.open {
+        left: 0;
+    }
+    .sidebar h3 {
+        display: block;
+        text-align: center;
+    }
+    .sidebar a {
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+    .sidebar .text-danger {
+        margin-top: 30px;
+    }
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 1999;
+    }
+    .sidebar-overlay.active {
+        display: block;
+    }
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 2100;
+        background: #343a40;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+    .content {
+        margin-left: 0 !important;
+        padding: 15px 5px;
+    }
+    .row, .col-md-4, .col-md-8, .col-md-6, .col-md-12 {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .card, .table {
+        width: 100% !important;
+        font-size: 14px;
+    }
+    .modal-dialog {
+        max-width: 95vw;
+        margin: 1.75rem auto;
+    }
+    .chat-box {
+        height: 200px;
+        font-size: 13px;
+    }
+    .btn, .form-control, select, input, textarea {
+        font-size: 14px !important;
+    }
+    .carousel-item img {
+        max-height: 180px;
+    }
+    .section {
+        padding: 10px 0;
+    }
+    .mb-5, .mb-4, .mb-3, .mt-4, .mt-5 {
+        margin-bottom: 15px !important;
+        margin-top: 15px !important;
+    }
+    .table th, .table td {
+        padding: 6px !important;
+    }
+    .footer-bottom {
+        font-size: 12px;
+        text-align: center;
+    }
+    /* Mensajes */
+    #mensajes .row {
+        flex-direction: column !important;
+    }
+    #mensajes .col-md-4, #mensajes .col-md-8 {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 10px;
+    }
+    #mensajes .card {
+        height: auto !important;
+        min-height: 300px;
+    }
+    /* Carrusel de imágenes */
+    #imagenes .carousel-item img {
+        max-height: 160px;
+    }
+    #vehiculos .table-responsive {
+        overflow-x: auto;
+    }
+    #vehiculos table {
+        min-width: 900px;
+        font-size: 13px;
+    }
+    #vehiculos .btn, #vehiculos .form-control, #vehiculos select, #vehiculos input, #vehiculos textarea {
+        font-size: 13px !important;
+    }
+    #vehiculos img {
+        max-width: 70px;
+        height: auto;
+    }
+    #vehiculos .modal-dialog {
+        max-width: 98vw;
+        margin: 1.75rem auto;
+    }
+}
+@media (max-width: 600px) {
+
+    #vehiculos table {
+        min-width: 700px;
+        font-size: 11px;
+    }
+    #vehiculos img {
+        max-width: 45px;
+    }
+    #vehiculos .modal-dialog {
+        max-width: 99vw;
+    }
+}
+@media (max-width: 600px) {
+    .sidebar {
+        width: 80vw;
+        left: -80vw;
+    }
+    .sidebar.open {
+        left: 0;
+    }
+    .sidebar-toggle {
+        font-size: 26px;
+        padding: 10px 16px;
+    }
+    .card, .table {
+        font-size: 12px;
+    }
+    .modal-dialog {
+        max-width: 99vw;
+    }
+    .section {
+        padding: 5px 0;
+    }
+    .chat-box {
+        height: 120px;
+        font-size: 12px;
+    }
+    #imagenes .carousel-item img {
+        max-height: 100px;
+    }
+}
     </style>
 </head>
 <body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menú">
+    <i class='bx bx-menu'></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
     <!-- Barra lateral -->
     <div class="sidebar">
         <h3 class="text-center">Carfinity</h3>
@@ -323,6 +525,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
             <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Agregar Coche</button>
 
             <!-- Tabla de Coches -->
+             <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -386,6 +589,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
                     <?php endwhile; ?>
                 </tbody>
             </table>
+            </div>
         </section>
 
         <!-- Modal para crear coche -->
@@ -584,7 +788,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
         </section>
     </main>
  <!-- Sección de Mensajes -->
-<section id="mensajes" class="mt-5 section active">
+<section id="mensajes" class="mt-5 section">
     <h2>Mensajes</h2>
     <div class="row">
         <!-- Lista de chats -->
@@ -613,30 +817,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensaje_admin']) && i
         </div>
     </div>
 </section>
-
-<style>
-/* Estilos para el chat */
-.chat-box {
-    overflow-y: auto;
-    height: 300px;
-}
-
-.bubble {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.bubble.admin {
-    background-color: #d1e7dd;
-    text-align: right;
-}
-
-.bubble.user {
-    background-color: #b3b3b3;
-    text-align: left;
-}
-</style>
  <!-- Gestión de Imágenes -->
 <section id="imagenes" class="section">
     <h2 class="mb-4">Gestión de Imágenes de Vehículos</h2>
@@ -1007,6 +1187,35 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error al enviar mensaje:', error));
     }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Sidebar responsive
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    sidebarToggle.addEventListener('click', openSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Cerrar sidebar al hacer click en un enlace (en móvil)
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 991) closeSidebar();
+        });
+    });
 });
 </script>
 </body>
